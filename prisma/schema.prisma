@@ -1,0 +1,179 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ============================================
+// USERS & AUTHENTICATION
+// ============================================
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name String
+  role      Role
+  isEnabled  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Role-specific data
+  venueManagerAssignments VenueManager[]
+  dutyManagerAssignments  DutyManager[]
+
+  // Actions performed
+  bansCreated           Ban[]             @relation("BanCreator")
+}
+
+enum Role {
+  ADMIN
+  VENUE_MANAGER
+  DUTY_MANAGER
+  BOUNCER
+}
+
+// ============================================
+// VENUES
+// ============================================
+
+model Venue {
+  id        String   @id @default(uuid())
+  name      String
+  imagePath String
+  address   String
+  phone     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  venueManagers VenueManager[]
+  dutyManagers  DutyManager[]
+  venueBans     VenueBan[]
+}
+
+// Many-to-many: Venue Managers can manage multiple venues
+model VenueManager {
+  id        String   @id @default(uuid())
+  userId    String
+  venueId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  venue Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, venueId])
+  @@index([userId])
+  @@index([venueId])
+}
+
+// Many-to-many: Duty Managers can be assigned to multiple venues (view only)
+model DutyManager {
+  id        String   @id @default(uuid())
+  userId    String
+  venueId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  venue Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, venueId])
+  @@index([userId])
+  @@index([venueId])
+}
+
+// ============================================
+// PEOPLE (BANNED INDIVIDUALS)
+// ============================================
+
+model BannedPerson {
+  id        String   @id @default(uuid())
+  name      String
+  imagePath String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bans Ban[]
+}
+
+// ============================================
+// BANS
+// ============================================
+
+model Ban {
+  id              String      @id @default(uuid())
+  personId        String
+  createdById     String
+  reason          String
+  notes           String?
+  incidentDate    DateTime    @default(now()) // When the incident occurred
+  initialDuration BanDuration // 1, 3, 6 months, 1 or 2 years
+
+  // Ban type and scope
+  isBlanketBan Boolean @default(false) // True = applies to all venues, False = specific venues
+
+  // Status workflow
+  status BanStatus @default(PENDING)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  person        BannedPerson      @relation(fields: [personId], references: [id], onDelete: Cascade)
+  createdBy     User              @relation("BanCreator", fields: [createdById], references: [id])
+  venueBans     VenueBan[] // Individual venue-level bans with specific end dates
+
+  @@index([personId])
+  @@index([createdById])
+  @@index([status])
+  @@index([isBlanketBan])
+}
+
+enum BanStatus {
+  PENDING // Awaiting approval
+  APPROVED // Active ban
+  DENIED // Rejected by approver
+  EXPIRED // Past end date
+}
+
+enum BanDuration {
+  ONE_MONTH
+  THREE_MONTHS
+  SIX_MONTHS
+  ONE_YEAR
+  TWO_YEARS
+}
+
+// ============================================
+// VENUE-SPECIFIC BAN DETAILS
+// ============================================
+
+// This table allows each venue to have its own end date for a ban
+model VenueBan {
+  id        String   @id @default(uuid())
+  banId     String
+  venueId   String
+  startDate DateTime @default(now())
+  endDate   DateTime // Can be modified independently per venue
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ban   Ban   @relation(fields: [banId], references: [id], onDelete: Cascade)
+  venue Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@unique([banId, venueId])
+  @@index([banId])
+  @@index([venueId])
+  @@index([isActive])
+  @@index([endDate])
+}
