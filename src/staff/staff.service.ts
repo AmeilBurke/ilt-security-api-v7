@@ -3,6 +3,7 @@ import { CreateStaffDto } from './dto/create-staff.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { hashPassword } from 'src/utils';
 import { Role } from '@prisma/client';
+import { StaffNoPassword } from 'src/utils/types';
 
 @Injectable()
 export class StaffService {
@@ -56,5 +57,13 @@ export class StaffService {
     })
 
     return `created account for ${newStaff.name} with a role of ${newStaff.role}`
+  }
+
+  async findAll(): Promise<StaffNoPassword[]> {
+    return this.prisma.staff.findMany({
+      omit: {
+        password: true
+      }
+    })
   }
 }
