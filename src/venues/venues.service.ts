@@ -3,16 +3,16 @@ import { CreateVenueDto } from './dto/create-venue.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
-import { Request } from 'express';
 import sharp from 'sharp';
 import * as fs from 'fs';
+import { UpdateVenueDto } from './dto/update-venue.dto';
 
 @Injectable()
 export class VenuesService {
   constructor(private prisma: PrismaService) { }
 
   async create(
-    req: Request,
+    baseUrl: string,
     file: Express.Multer.File,
     createVenueDto: CreateVenueDto,
   ) {
@@ -28,7 +28,7 @@ export class VenuesService {
     }
 
     const newVenue = await this.prisma.$transaction(async (tx) => {
-      const venue = await this.prisma.venue.create({
+      const venue = await tx.venue.create({
         data: {
           name: createVenueDto.name,
           imagePath: `${file.filename}.webp`,
@@ -46,8 +46,6 @@ export class VenuesService {
       }
       return venue;
     });
-    const baseUrl = `${req.protocol}://${req.get('host')}`;
-    console.log(newVenue)
 
     return {
       ...newVenue,
@@ -55,19 +53,103 @@ export class VenuesService {
     };
   }
 
+  async findAll(baseUrl: string) {
+    const allVenues = await this.prisma.venue.findMany();
+    return allVenues.map((venue) => {
+      return {
+        ...venue,
+        imagePath: `${baseUrl}/uploads/compressed/venues/${venue.imagePath}`,
+      };
+    });
+  }
+
+  async findOneById(baseUrl: string, id: string) {
+    const venue = await this.prisma.venue.findUniqueOrThrow({
+      where: {
+        id: id,
+      },
+    });
+
+    return {
+      ...venue,
+      imagePath: `${baseUrl}/uploads/compressed/venues/${venue.imagePath}`,
+    };
+  }
+
+  async updateOneById(
+    baseUrl: string,
+    id: string,
+    file: Express.Multer.File,
+    updateVenueDto: UpdateVenueDto,
+  ) {
+    try {
+      await sharp(file.path)
+        .webp({ quality: 75 })
+        .toFile(`uploads/compressed/venues/${file.filename}.webp`);
+
+      await fs.promises.unlink(file.path);
+    } catch (error) {
+      await fs.promises.unlink(file.path).catch(() => { });
+      throw new InternalServerErrorException('Image processing failed');
+    }
+
+    const updatedVenue = await this.prisma.$transaction(async (tx) => {
+      const venue = await this.prisma.venue.update({
+        where: {
+          id: id,
+        },
+        data: {
+          name: updateVenueDto.name,
+          imagePath: `${file.filename}.webp`,
+          address: updateVenueDto.address,
+          phone: updateVenueDto.phone,
+        },
+      });
+
+      if (updateVenueDto.venueManagers || updateVenueDto.dutyManagers) {
+        if (updateVenueDto.venueManagers) {
+          await tx.venueManager.deleteMany({
+            where: {
+              venueId: venue.id,
+            },
+          });
+        }
+
+        if (updateVenueDto.dutyManagers) {
+          await tx.dutyManager.deleteMany({
+            where: {
+              venueId: venue.id,
+            },
+          });
+        }
+
+        await this.addVenueAndDutyManagersToVenue(
+          venue.id,
+          updateVenueDto,
+          tx,
+        );
+      }
+      return venue
+    });
+    return {
+      ...updateVenueDto,
+      imagePath: `${baseUrl}/uploads/compressed/venues/${updatedVenue.imagePath}`,
+    };
+  }
+
   private async addVenueAndDutyManagersToVenue(
     venueId: string,
-    createVenueDto: CreateVenueDto,
+    venueDto: CreateVenueDto | UpdateVenueDto,
     tx: Omit<
       PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,
       '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'
     >,
   ) {
-    if (createVenueDto.venueManagers) {
+    if (venueDto.venueManagers) {
       const venueManagerIds = await tx.staff.findMany({
         where: {
           id: {
-            in: createVenueDto.venueManagers,
+            in: venueDto.venueManagers,
           },
         },
         select: {
@@ -83,11 +165,11 @@ export class VenuesService {
       });
     }
 
-    if (createVenueDto.dutyManagers) {
+    if (venueDto.dutyManagers) {
       await tx.staff.findMany({
         where: {
           id: {
-            in: createVenueDto.dutyManagers,
+            in: venueDto.dutyManagers,
           },
         },
         select: {
@@ -96,7 +178,7 @@ export class VenuesService {
       });
 
       await tx.dutyManager.createMany({
-        data: createVenueDto.dutyManagers.map((dutyManagerIds) => ({
+        data: venueDto.dutyManagers.map((dutyManagerIds) => ({
           userId: dutyManagerIds,
           venueId: venueId,
         })),
