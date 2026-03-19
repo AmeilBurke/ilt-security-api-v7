@@ -1,4 +1,12 @@
-import { Controller, Post, Body, UseInterceptors, UploadedFile, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseInterceptors,
+  UploadedFile,
+  Req,
+  BadRequestException,
+} from '@nestjs/common';
 import express from 'express';
 import { VenuesService } from './venues.service';
 import { CreateVenueDto } from './dto/create-venue.dto';
@@ -15,19 +23,33 @@ export class VenuesController {
   @UseInterceptors(
     FileInterceptor('image', {
       limits: {
-        files: 1
+        files: 1,
       },
       storage: multer.diskStorage({
         destination: 'uploads/uncompressed',
-        filename: function (req, file, cb) {
-          console.log(file)
-          cb(null, `${uuidv4()}${path.extname(file.originalname)}`)
+        filename: function (req, file, callback) {
+          callback(null, `${uuidv4()}`);
+        },
+      }),
+      fileFilter(req, file, callback) {
+        if (file &&
+          (file.mimetype === 'image/png' ||
+            file.mimetype === 'image/webp' ||
+            file.mimetype === 'image/jpeg')
+        ) {
+          callback(null, true);
+        } else {
+          callback(new BadRequestException('File given is not a png, webp or jpeg'), false);
         }
-      })
+      },
     }),
   )
-  create(@Req() req: express.Request, @UploadedFile() file: Express.Multer.File, @Body() createVenueDto: CreateVenueDto) {
-    // need to add check for valid image extension, bSharp for compression, move image to compressed & return it & try catch to delete image if error is encountered
+  create(
+    @Req() req: express.Request,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createVenueDto: CreateVenueDto,
+  ) {
+    // try catch to delete image if error is encountered
     return this.venuesService.create(req, file, createVenueDto);
   }
 }
