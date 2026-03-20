@@ -5,10 +5,10 @@ import {
   UseInterceptors,
   UploadedFile,
   Req,
-  BadRequestException,
   Get,
   Param,
   Patch,
+  Delete,
 } from '@nestjs/common';
 import express from 'express';
 import { VenuesService } from './venues.service';
@@ -36,7 +36,7 @@ export class VenuesController {
         },
       }),
       fileFilter(req, file, callback) {
-        imageFileValidator(file, callback)
+        imageFileValidator(file, callback);
       },
     }),
   )
@@ -50,8 +50,15 @@ export class VenuesController {
   }
 
   @Get()
-  findAll(@Req() baseUrl: string) {
+  findAll(@Req() req: express.Request) {
+    const baseUrl = getBaseUrl(req);
     return this.venuesService.findAll(baseUrl);
+  }
+
+  @Get(':id')
+  findOneById(@Req() req: express.Request, @Param('id') id: string,) {
+    const baseUrl = getBaseUrl(req);
+    return this.venuesService.findOneById(baseUrl, id);
   }
 
   @Patch(':id')
@@ -67,7 +74,7 @@ export class VenuesController {
         },
       }),
       fileFilter(req, file, callback) {
-        imageFileValidator(file, callback)
+        imageFileValidator(file, callback);
       },
     }),
   )
@@ -78,8 +85,13 @@ export class VenuesController {
     @Body() updateVenueDto: UpdateVenueDto,
   ) {
     const baseUrl = getBaseUrl(req);
-    console.log(baseUrl)
+    console.log(baseUrl);
 
     return this.venuesService.updateOneById(baseUrl, id, file, updateVenueDto);
+  }
+
+  @Delete(':id')
+  deleteOneById(@Req() req: express.Request, @Param('id') id: string) {
+    return this.venuesService.deleteOneById(id);
   }
 }

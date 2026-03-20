@@ -9,7 +9,7 @@ import { UpdateVenueDto } from './dto/update-venue.dto';
 
 @Injectable()
 export class VenuesService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(
     baseUrl: string,
@@ -23,7 +23,7 @@ export class VenuesService {
 
       await fs.promises.unlink(file.path);
     } catch (error) {
-      await fs.promises.unlink(file.path).catch(() => { });
+      await fs.promises.unlink(file.path).catch(() => {});
       throw new InternalServerErrorException('Image processing failed');
     }
 
@@ -89,7 +89,7 @@ export class VenuesService {
 
       await fs.promises.unlink(file.path);
     } catch (error) {
-      await fs.promises.unlink(file.path).catch(() => { });
+      await fs.promises.unlink(file.path).catch(() => {});
       throw new InternalServerErrorException('Image processing failed');
     }
 
@@ -123,18 +123,44 @@ export class VenuesService {
           });
         }
 
-        await this.addVenueAndDutyManagersToVenue(
-          venue.id,
-          updateVenueDto,
-          tx,
-        );
+        await this.addVenueAndDutyManagersToVenue(venue.id, updateVenueDto, tx);
       }
-      return venue
+      return venue;
     });
     return {
       ...updateVenueDto,
       imagePath: `${baseUrl}/uploads/compressed/venues/${updatedVenue.imagePath}`,
     };
+  }
+
+  async deleteOneById(id: string) {
+    await this.prisma.$transaction(async (tx) => {
+      await tx.venue.delete({
+        where: {
+          id: id,
+        },
+      });
+
+      await tx.venueBan.deleteMany({
+        where: {
+          venueId: id,
+        },
+      });
+
+      await tx.venueManager.deleteMany({
+        where: {
+          venueId: id,
+        },
+      });
+
+      await tx.dutyManager.deleteMany({
+        where: {
+          venueId: id,
+        },
+      });
+    });
+
+    return 'Venue has been deleted';
   }
 
   private async addVenueAndDutyManagersToVenue(
