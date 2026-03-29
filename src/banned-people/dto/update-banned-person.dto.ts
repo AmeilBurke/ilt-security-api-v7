@@ -1,4 +1,8 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateBannedPersonDto } from './create-banned-person.dto';
+import { BanDuration } from '@prisma/client';
+import { IsString, IsOptional, IsDateString, IsEnum, IsBooleanString } from 'class-validator';
 
-export class UpdateBannedPersonDto extends PartialType(CreateBannedPersonDto) {}
+export class UpdateBannedPersonDto {
+    @IsOptional()
+    @IsString()
+    name?: string;
+}

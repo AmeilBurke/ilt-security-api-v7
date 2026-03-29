@@ -32,8 +32,8 @@ export class BannedPeopleService {
           imagePath: `${file.filename}.webp`,
         },
         include: {
-          bans: true
-        }
+          bans: true,
+        },
       });
 
       const ban = await tx.ban.create({
@@ -52,7 +52,6 @@ export class BannedPeopleService {
       return { ...bannedPerson, bans: [ban] };
     });
 
-
     return {
       ...newBannedPerson,
       imagePath: `${baseUrl}/uploads/compressed/people/${newBannedPerson.imagePath}`,
@@ -60,11 +59,108 @@ export class BannedPeopleService {
   }
   // need to test in postman
 
-  async findAll(baseUrl: string) {
-    return await this.prisma.bannedPerson.findMany({
+  async findAllBlanketBanned(baseUrl: string) {
+    const blanketBanned = await this.prisma.bannedPerson.findMany({
+      where: {
+        bans: {
+          some: {
+            isBlanketBan: true,
+          },
+        },
+      },
       include: {
-        bans: true
+        bans: true,
+      },
+    });
+
+    return blanketBanned.map((person) => {
+      return {
+        ...person,
+        imagePath: `${baseUrl}/uploads/compressed/people/${person.imagePath}`,
+      };
+    });
+  }
+
+  async findAllByVenueId(baseUrl: string, venueId: string) {
+    const bannedFromVenue = await this.prisma.bannedPerson.findMany({
+      where: {
+        bans: {
+          some: {
+            venueBans: {
+              some: {
+                venueId: venueId,
+              },
+            },
+          },
+        },
+      },
+      include: {
+        bans: true,
+      },
+    });
+
+    return bannedFromVenue.map((person) => {
+      return {
+        ...person,
+        imagePath: `${baseUrl}/uploads/compressed/people/${person.imagePath}`,
+      };
+    });
+  }
+
+  async findOneById(baseUrl: string, id: string) {
+    const person = await this.prisma.bannedPerson.findMany({
+      where: {
+        id: id
+      },
+      include: {
+        bans: true,
+      },
+    });
+
+    return person.map((details) => {
+      return {
+        ...details,
+        imagePath: `${baseUrl}/uploads/compressed/people/${details.imagePath}`,
+      };
+    });
+  }
+
+  async updateOneById(baseUrl: string, id: string, updateBannedPersonDto: UpdateBannedPersonDto, file: Express.Multer.File | undefined,) {
+    if (file) {
+      const outdatedDetails = await this.prisma.bannedPerson.findUnique({
+        where: {
+          id: id
+        }
+      })
+
+      console.log(outdatedDetails);
+
+      try {
+        await sharp(file.path)
+          .webp({ quality: 75 })
+          .toFile(`uploads/compressed/people/${file.filename}.webp`);
+
+        await fs.promises.unlink(file.path);
+        await fs.promises.unlink(`uploads/compressed/people/${outdatedDetails?.imagePath}`);
+      } catch (error) {
+        await fs.promises.unlink(file.path).catch(() => { });
+        throw new InternalServerErrorException('Image processing failed');
+      }
+    }
+
+    const updatedDetails = await this.prisma.bannedPerson.update({
+      where: {
+        id: id
+      },
+      data: {
+        name: updateBannedPersonDto.name,
+        imagePath: file ? `${file.filename}.webp` : undefined,
       }
     })
+
+    return {
+      ...updatedDetails,
+      imagePath: `${baseUrl}/uploads/compressed/people/${updatedDetails.imagePath}`,
+    }
   }
 }
