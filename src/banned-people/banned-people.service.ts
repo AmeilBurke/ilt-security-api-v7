@@ -133,8 +133,6 @@ export class BannedPeopleService {
         }
       })
 
-      console.log(outdatedDetails);
-
       try {
         await sharp(file.path)
           .webp({ quality: 75 })
