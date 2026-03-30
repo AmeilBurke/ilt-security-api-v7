@@ -1,4 +1,14 @@
-import { Controller, Post, Body, UseInterceptors, Req, UploadedFile, Get, Param, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseInterceptors,
+  Req,
+  UploadedFile,
+  Get,
+  Param,
+  Patch,
+} from '@nestjs/common';
 import { BannedPeopleService } from './banned-people.service';
 import { CreateBannedPersonDto } from './dto/create-banned-person.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -10,7 +20,7 @@ import { UpdateBannedPersonDto } from './dto/update-banned-person.dto';
 
 @Controller('banned-people')
 export class BannedPeopleController {
-  constructor(private readonly bannedPeopleService: BannedPeopleService) { }
+  constructor(private readonly bannedPeopleService: BannedPeopleService) {}
 
   @Post()
   @UseInterceptors(
@@ -29,10 +39,17 @@ export class BannedPeopleController {
       },
     }),
   )
-  create(@Req() req: express.Request,
-    @UploadedFile() file: Express.Multer.File, @Body() createBannedPersonDto: CreateBannedPersonDto) {
+  create(
+    @Req() req: express.Request,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createBannedPersonDto: CreateBannedPersonDto,
+  ) {
     const baseUrl = getBaseUrl(req);
-    return this.bannedPeopleService.create(baseUrl, file, createBannedPersonDto);
+    return this.bannedPeopleService.create(
+      baseUrl,
+      file,
+      createBannedPersonDto,
+    );
   }
 
   @Get('/blanket-banned')
@@ -42,13 +59,13 @@ export class BannedPeopleController {
   }
 
   @Get('/venue/:id')
-  findAllByVenueId(@Req() req: express.Request, @Param('id') id: string,) {
+  findAllByVenueId(@Req() req: express.Request, @Param('id') id: string) {
     const baseUrl = getBaseUrl(req);
     return this.bannedPeopleService.findAllByVenueId(baseUrl, id);
   }
 
   @Get(':id')
-  findOneById(@Req() req: express.Request, @Param('id') id: string,) {
+  findOneById(@Req() req: express.Request, @Param('id') id: string) {
     const baseUrl = getBaseUrl(req);
     return this.bannedPeopleService.findOneById(baseUrl, id);
   }
@@ -70,8 +87,18 @@ export class BannedPeopleController {
       },
     }),
   )
-  updateOneById(@Req() req: express.Request, @Param('id') id: string, @Body() updateBannedPersonDto: UpdateBannedPersonDto, @UploadedFile() file?: Express.Multer.File) {
+  updateOneById(
+    @Req() req: express.Request,
+    @Param('id') id: string,
+    @Body() updateBannedPersonDto: UpdateBannedPersonDto,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
     const baseUrl = getBaseUrl(req);
-    return this.bannedPeopleService.updateOneById(baseUrl, id, updateBannedPersonDto, file);
+    return this.bannedPeopleService.updateOneById(
+      baseUrl,
+      id,
+      updateBannedPersonDto,
+      file,
+    );
   }
 }

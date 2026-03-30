@@ -9,7 +9,7 @@ import { UpdateVenueDto } from './dto/update-venue.dto';
 
 @Injectable()
 export class VenuesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(
     baseUrl: string,
@@ -23,7 +23,7 @@ export class VenuesService {
 
       await fs.promises.unlink(file.path);
     } catch (error) {
-      await fs.promises.unlink(file.path).catch(() => {});
+      await fs.promises.unlink(file.path).catch(() => { });
       throw new InternalServerErrorException('Image processing failed');
     }
 
@@ -44,6 +44,7 @@ export class VenuesService {
       if (createVenueDto.venueManagers || createVenueDto.dutyManagers) {
         await this.addVenueAndDutyManagersToVenue(venue.id, createVenueDto, tx);
       }
+
       return venue;
     });
 
@@ -89,7 +90,7 @@ export class VenuesService {
 
       await fs.promises.unlink(file.path);
     } catch (error) {
-      await fs.promises.unlink(file.path).catch(() => {});
+      await fs.promises.unlink(file.path).catch(() => { });
       throw new InternalServerErrorException('Image processing failed');
     }
 

@@ -12,7 +12,7 @@ import { UpdateStaffDto } from './dto/update-staff.dto';
 
 @Injectable()
 export class StaffService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(createStaffDto: CreateStaffDto): Promise<string> {
     // check if requester is admin when jwt token is implemented
@@ -77,7 +77,7 @@ export class StaffService {
   }
 
   async findOneById(id: string): Promise<StaffFrontEnd> {
-    return this.prisma.staff.findUniqueOrThrow({
+    return await this.prisma.staff.findUniqueOrThrow({
       where: { id: id },
       omit: {
         password: true,
@@ -87,6 +87,14 @@ export class StaffService {
         dutyManagerAssignments: true,
       },
     });
+  }
+
+  async findOneByEmail(email: string) {
+    return await this.prisma.staff.findUniqueOrThrow({
+      where: {
+        email: email
+      }
+    })
   }
 
   async updateById(
