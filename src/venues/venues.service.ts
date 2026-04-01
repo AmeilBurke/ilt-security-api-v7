@@ -1,8 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateVenueDto } from './dto/create-venue.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma, PrismaClient } from '@prisma/client';
-import { DefaultArgs } from '@prisma/client/runtime/library';
+import { Prisma } from '../generated/prisma/client'
 import sharp from 'sharp';
 import * as fs from 'fs';
 import { UpdateVenueDto } from './dto/update-venue.dto';
@@ -95,7 +94,7 @@ export class VenuesService {
     }
 
     const updatedVenue = await this.prisma.$transaction(async (tx) => {
-      const venue = await this.prisma.venue.update({
+      const venue = await tx.venue.update({
         where: {
           id: id,
         },
@@ -167,10 +166,7 @@ export class VenuesService {
   private async addVenueAndDutyManagersToVenue(
     venueId: string,
     venueDto: CreateVenueDto | UpdateVenueDto,
-    tx: Omit<
-      PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,
-      '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'
-    >,
+    tx: Prisma.TransactionClient
   ) {
     if (venueDto.venueManagers) {
       const venueManagerIds = await tx.staff.findMany({

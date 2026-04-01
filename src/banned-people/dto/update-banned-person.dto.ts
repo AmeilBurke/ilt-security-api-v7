@@ -1,5 +1,4 @@
-import { BanDuration } from '@prisma/client';
-import { IsString, IsOptional, IsDateString, IsEnum, IsBooleanString } from 'class-validator';
+import { IsString, IsOptional } from 'class-validator';
 
 export class UpdateBannedPersonDto {
     @IsOptional()

@@ -1,5 +1,5 @@
-import { BanDuration } from '@prisma/client';
 import { IsBoolean, IsBooleanString, IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
+import { BanDuration } from 'src/generated/prisma/client';
 
 export class CreateBannedPersonDto {
   @IsString()

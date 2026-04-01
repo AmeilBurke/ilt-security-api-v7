@@ -6,7 +6,7 @@ import {
 import { CreateStaffDto } from './dto/create-staff.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { hashPassword } from 'src/utils';
-import { Role } from '@prisma/client';
+import { Role } from 'src/generated/prisma/enums';
 import { StaffFrontEnd } from 'src/utils/types';
 import { UpdateStaffDto } from './dto/update-staff.dto';
 

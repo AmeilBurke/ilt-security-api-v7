@@ -1,4 +1,4 @@
-import { Role } from '@prisma/client';
+import { Role } from 'src/generated/prisma/enums';
 import {
   IsArray,
   IsEmail,

@@ -1,4 +1,4 @@
-import { Prisma, Staff } from '@prisma/client';
+import { Prisma } from "src/generated/prisma/client";
 
 export type StaffFrontEnd = Omit<
   Prisma.StaffGetPayload<{
