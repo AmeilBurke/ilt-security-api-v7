@@ -2,20 +2,40 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateStaffDto } from './dto/create-staff.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { hashPassword } from 'src/utils';
 import { Role } from 'src/generated/prisma/enums';
-import { StaffFrontEnd } from 'src/utils/types';
+import { StaffFrontEnd, StaffPayload } from 'src/utils/types';
 import { UpdateStaffDto } from './dto/update-staff.dto';
+import express from 'express';
 
 @Injectable()
 export class StaffService {
   constructor(private prisma: PrismaService) { }
 
-  async create(createStaffDto: CreateStaffDto): Promise<string> {
-    // check if requester is admin when jwt token is implemented
+  async create(createStaffDto: CreateStaffDto, staff?: StaffPayload): Promise<any> {
+    console.log(staff)
+
+
+    if ((await this.prisma.staff.findMany()).length > 0 && !staff) {
+      throw new UnauthorizedException()
+    }
+
+
+    if (staff !== undefined) {
+      const requestAccountResult = await this.prisma.staff.findUniqueOrThrow({
+        where: {
+          id: staff.sub
+        }
+      })
+
+      if (requestAccountResult.role !== 'ADMIN') {
+        throw new UnauthorizedException()
+      }
+    }
 
     this.validateVenueAndDutyManagerAssignments(createStaffDto);
 
@@ -98,10 +118,22 @@ export class StaffService {
   }
 
   async updateById(
+    staff: StaffPayload,
     id: string,
     updateStaffDto: UpdateStaffDto,
   ): Promise<StaffFrontEnd> {
-    // check if requester is admin when jwt token is implemented
+    
+    if (staff !== undefined) {
+      const requestAccountResult = await this.prisma.staff.findUniqueOrThrow({
+        where: {
+          id: staff.sub
+        }
+      })
+
+      if (requestAccountResult.role !== 'ADMIN') {
+        throw new UnauthorizedException()
+      }
+    }
 
     this.validateVenueAndDutyManagerAssignments(updateStaffDto);
 
@@ -183,7 +215,6 @@ export class StaffService {
       }
       return staff;
     });
-    // return `updated details for ${updatedStaff.name}`;
     return updatedStaff;
   }
 

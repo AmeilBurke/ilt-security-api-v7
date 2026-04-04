@@ -5,11 +5,10 @@ export class CreateBannedPersonDto {
   @IsString()
   name: string;
 
-  @IsString()
-  createdById: string;
+  // @IsString()
+  // createdById: string;
 
   @IsString()
-  // need to be removed when jwt token is implemented
   reason: string;
 
   @IsOptional()

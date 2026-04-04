@@ -19,26 +19,22 @@ export class AuthenticationGuard implements CanActivate {
             context.getHandler(),
             context.getClass(),
         ]);
-        if (isPublic) {
-            // 💡 See this condition
-            return true;
-        }
 
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
-        if (!token) {
+
+        // Always try to decode the token if present
+        if (token) {
+            try {
+                const payload = await this.jwtService.verifyAsync(token);
+                request['staff'] = payload;
+            } catch {
+                if (!isPublic) throw new UnauthorizedException();
+            }
+        } else if (!isPublic) {
             throw new UnauthorizedException();
         }
-        try {
-            // 💡 Here the JWT secret key that's used for verifying the payload 
-            // is the key that was passed in the JwtModule
-            const payload = await this.jwtService.verifyAsync(token);
-            // 💡 We're assigning the payload to the request object here
-            // so that we can access it in our route handlers
-            request['staff'] = payload;
-        } catch {
-            throw new UnauthorizedException();
-        }
+
         return true;
     }
 

@@ -1,15 +1,28 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Patch,
+  Delete,
+  Req,
+} from '@nestjs/common';
 import { StaffService } from './staff.service';
 import { CreateStaffDto } from './dto/create-staff.dto';
 import { UpdateStaffDto } from './dto/update-staff.dto';
+import { Public } from 'src/authentication/public.decorator';
+import type { StaffPayload } from 'src/utils/types';
+import { Staff } from './staff.decorator';
 
 @Controller('staff')
 export class StaffController {
   constructor(private readonly staffService: StaffService) { }
 
+  @Public()
   @Post()
-  create(@Body() createStaffDto: CreateStaffDto) {
-    return this.staffService.create(createStaffDto);
+  create(@Body() createStaffDto: CreateStaffDto, @Staff() staff?: StaffPayload,) {
+    return this.staffService.create(createStaffDto, staff);
   }
 
   @Get()
@@ -23,12 +36,16 @@ export class StaffController {
   }
 
   @Patch(':id')
-  updateOneById(@Param('id') id: string, @Body() updateStaffDto: UpdateStaffDto) {
-    return this.staffService.updateById(id, updateStaffDto);
+  updateOneById(
+    @Staff() staff: StaffPayload,
+    @Param('id') id: string,
+    @Body() updateStaffDto: UpdateStaffDto,
+  ) {
+    return this.staffService.updateById(staff, id, updateStaffDto);
   }
 
   @Delete(':id')
   deleteById(@Param('id') id: string) {
-    return this.staffService.deleteById(id)
+    return this.staffService.deleteById(id);
   }
 }

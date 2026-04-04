@@ -12,3 +12,8 @@ export type StaffFrontEnd = Omit<
   }>,
   'password'
 >;
+
+export type StaffPayload = {
+  sub: string,
+  iat: number
+}

@@ -18,6 +18,7 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     prefix: '/uploads',
   });
+  console.log('DB URL defined:', !!process.env.DATABASE_URL);
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

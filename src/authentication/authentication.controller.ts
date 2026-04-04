@@ -1,16 +1,21 @@
-import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Post, HttpCode, HttpStatus, Get, Req, UnauthorizedException } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { SignInDto } from './dto/signIn.dto';
 import { Public } from './public.decorator';
 
 @Controller('authentication')
 export class AuthenticationController {
-  constructor(private authService: AuthenticationService) {}
+  constructor(private authService: AuthenticationService) { }
 
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('/sign-in')
   signIn(@Body() signInDto: SignInDto) {
     return this.authService.signIn(signInDto.email, signInDto.password);
+  }
+
+  @Get('profile')
+  getProfile(@Req() req: any) {
+    return req.staff;
   }
 }

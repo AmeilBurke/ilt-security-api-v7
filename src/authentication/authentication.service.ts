@@ -8,18 +8,18 @@ export class AuthenticationService {
   constructor(
     private staffService: StaffService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signIn(email: string, password: string): Promise<any> {
-    const user = await this.staffService.findOneByEmail(email);
+    const staff = await this.staffService.findOneByEmail(email);
 
-    const isPasswordCorrect = await checkPassword(password, user.password);
+    const isPasswordCorrect = await checkPassword(password, staff.password);
 
     if (!isPasswordCorrect) {
       throw new UnauthorizedException();
     }
 
-    const payload = { sub: user.id };
+    const payload = { sub: staff.id };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };

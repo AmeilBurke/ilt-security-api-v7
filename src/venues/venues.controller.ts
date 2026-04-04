@@ -18,6 +18,8 @@ import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { getBaseUrl, imageFileValidator } from 'src/utils';
 import { UpdateVenueDto } from './dto/update-venue.dto';
+import { Staff } from 'src/staff/staff.decorator';
+import type { StaffPayload } from 'src/utils/types';
 
 @Controller('venues')
 export class VenuesController {
@@ -42,11 +44,12 @@ export class VenuesController {
   )
   create(
     @Req() req: express.Request,
+    @Staff() staff: StaffPayload,
     @UploadedFile() file: Express.Multer.File,
     @Body() createVenueDto: CreateVenueDto,
   ) {
     const baseUrl = getBaseUrl(req);
-    return this.venuesService.create(baseUrl, file, createVenueDto);
+    return this.venuesService.create(baseUrl, staff, file, createVenueDto);
   }
 
   @Get()
@@ -80,6 +83,7 @@ export class VenuesController {
   )
   updateOneById(
     @Req() req: express.Request,
+    @Staff() staff: StaffPayload,
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File,
     @Body() updateVenueDto: UpdateVenueDto,
@@ -87,7 +91,7 @@ export class VenuesController {
     const baseUrl = getBaseUrl(req);
     console.log(baseUrl);
 
-    return this.venuesService.updateOneById(baseUrl, id, file, updateVenueDto);
+    return this.venuesService.updateOneById(baseUrl, staff, id, file, updateVenueDto);
   }
 
   @Delete(':id')

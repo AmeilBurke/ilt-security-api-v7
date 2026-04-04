@@ -17,6 +17,8 @@ import { getBaseUrl, imageFileValidator } from 'src/utils';
 import { v4 as uuidv4 } from 'uuid';
 import express from 'express';
 import { UpdateBannedPersonDto } from './dto/update-banned-person.dto';
+import { Staff } from 'src/staff/staff.decorator';
+import type { StaffPayload } from 'src/utils/types';
 
 @Controller('banned-people')
 export class BannedPeopleController {
@@ -41,12 +43,14 @@ export class BannedPeopleController {
   )
   create(
     @Req() req: express.Request,
+    @Staff() staff: StaffPayload,
     @UploadedFile() file: Express.Multer.File,
     @Body() createBannedPersonDto: CreateBannedPersonDto,
   ) {
     const baseUrl = getBaseUrl(req);
     return this.bannedPeopleService.create(
       baseUrl,
+      staff,
       file,
       createBannedPersonDto,
     );

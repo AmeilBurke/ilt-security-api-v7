@@ -4,6 +4,7 @@ import { UpdateBannedPersonDto } from './dto/update-banned-person.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import sharp from 'sharp';
 import * as fs from 'fs';
+import { StaffPayload } from 'src/utils/types';
 
 @Injectable()
 export class BannedPeopleService {
@@ -11,6 +12,7 @@ export class BannedPeopleService {
 
   async create(
     baseUrl: string,
+    staff: StaffPayload,
     file: Express.Multer.File,
     createBannedPersonDto: CreateBannedPersonDto,
   ) {
@@ -24,6 +26,12 @@ export class BannedPeopleService {
       await fs.promises.unlink(file.path).catch(() => { });
       throw new InternalServerErrorException('Image processing failed');
     }
+
+    const requestAccount = await this.prisma.staff.findUniqueOrThrow({
+      where: {
+        id: staff.sub
+      }
+    })
 
     const newBannedPerson = await this.prisma.$transaction(async (tx) => {
       const bannedPerson = await tx.bannedPerson.create({
@@ -39,7 +47,7 @@ export class BannedPeopleService {
       const ban = await tx.ban.create({
         data: {
           personId: bannedPerson.id,
-          createdById: createBannedPersonDto.createdById, // need to swap with id from jwt token when added
+          createdById: requestAccount.id, // need to swap with id from jwt token when added
           reason: createBannedPersonDto.reason,
           notes: createBannedPersonDto.notes,
           startDate: createBannedPersonDto.startDate,

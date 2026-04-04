@@ -1,10 +1,11 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { CreateVenueDto } from './dto/create-venue.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '../generated/prisma/client'
 import sharp from 'sharp';
 import * as fs from 'fs';
 import { UpdateVenueDto } from './dto/update-venue.dto';
+import { StaffPayload } from 'src/utils/types';
 
 @Injectable()
 export class VenuesService {
@@ -12,9 +13,23 @@ export class VenuesService {
 
   async create(
     baseUrl: string,
+    staff: StaffPayload,
     file: Express.Multer.File,
     createVenueDto: CreateVenueDto,
   ) {
+
+    if (staff !== undefined) {
+      const requestAccountResult = await this.prisma.staff.findUniqueOrThrow({
+        where: {
+          id: staff.sub
+        }
+      })
+
+      if (requestAccountResult.role !== 'ADMIN') {
+        throw new UnauthorizedException()
+      }
+    }
+
     try {
       await sharp(file.path)
         .webp({ quality: 75 })
@@ -54,7 +69,7 @@ export class VenuesService {
   }
 
   async findAll(baseUrl: string) {
-    const allVenues = await this.prisma.venue.findMany();
+    const allVenues = await this.prisma.venue.findMany({ include: { venueManagers: true, dutyManagers: true } });
     return allVenues.map((venue) => {
       return {
         ...venue,
@@ -78,10 +93,23 @@ export class VenuesService {
 
   async updateOneById(
     baseUrl: string,
+    staff: StaffPayload,
     id: string,
     file: Express.Multer.File,
     updateVenueDto: UpdateVenueDto,
   ) {
+    if (staff !== undefined) {
+      const requestAccountResult = await this.prisma.staff.findUniqueOrThrow({
+        where: {
+          id: staff.sub
+        }
+      })
+
+      if (requestAccountResult.role !== 'ADMIN') {
+        throw new UnauthorizedException()
+      }
+    }
+
     try {
       await sharp(file.path)
         .webp({ quality: 75 })
