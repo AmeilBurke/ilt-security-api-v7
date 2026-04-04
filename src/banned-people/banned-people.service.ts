@@ -16,6 +16,7 @@ export class BannedPeopleService {
     file: Express.Multer.File,
     createBannedPersonDto: CreateBannedPersonDto,
   ) {
+
     try {
       await sharp(file.path)
         .webp({ quality: 75 })

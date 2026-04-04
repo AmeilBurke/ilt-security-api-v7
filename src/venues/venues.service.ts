@@ -18,15 +18,19 @@ export class VenuesService {
     createVenueDto: CreateVenueDto,
   ) {
 
-    if (staff !== undefined) {
-      const requestAccountResult = await this.prisma.staff.findUniqueOrThrow({
-        where: {
-          id: staff.sub
-        }
-      })
+    const venueCount = await this.prisma.venue.count();
+    
+    if (venueCount > 0) {
+      if (!staff) {
+        throw new UnauthorizedException();
+      }
 
-      if (requestAccountResult.role !== 'ADMIN') {
-        throw new UnauthorizedException()
+      const requestAccount = await this.prisma.staff.findUniqueOrThrow({
+        where: { id: staff.sub }
+      });
+
+      if (requestAccount.role !== 'ADMIN') {
+        throw new UnauthorizedException();
       }
     }
 
@@ -98,15 +102,19 @@ export class VenuesService {
     file: Express.Multer.File,
     updateVenueDto: UpdateVenueDto,
   ) {
-    if (staff !== undefined) {
-      const requestAccountResult = await this.prisma.staff.findUniqueOrThrow({
-        where: {
-          id: staff.sub
-        }
-      })
+    const venueCount = await this.prisma.venue.count();
 
-      if (requestAccountResult.role !== 'ADMIN') {
-        throw new UnauthorizedException()
+    if (venueCount > 0) {
+      if (!staff) {
+        throw new UnauthorizedException();
+      }
+
+      const requestAccount = await this.prisma.staff.findUniqueOrThrow({
+        where: { id: staff.sub }
+      });
+
+      if (requestAccount.role !== 'ADMIN') {
+        throw new UnauthorizedException();
       }
     }
 

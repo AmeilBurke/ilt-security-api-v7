@@ -17,23 +17,20 @@ export class StaffService {
   constructor(private prisma: PrismaService) { }
 
   async create(createStaffDto: CreateStaffDto, staff?: StaffPayload): Promise<any> {
-    console.log(staff)
 
+    const staffCount = await this.prisma.staff.count();
 
-    if ((await this.prisma.staff.findMany()).length > 0 && !staff) {
-      throw new UnauthorizedException()
-    }
+    if (staffCount > 0) {
+      if (!staff) {
+        throw new UnauthorizedException();
+      }
 
+      const requestAccount = await this.prisma.staff.findUniqueOrThrow({
+        where: { id: staff.sub }
+      });
 
-    if (staff !== undefined) {
-      const requestAccountResult = await this.prisma.staff.findUniqueOrThrow({
-        where: {
-          id: staff.sub
-        }
-      })
-
-      if (requestAccountResult.role !== 'ADMIN') {
-        throw new UnauthorizedException()
+      if (requestAccount.role !== 'ADMIN') {
+        throw new UnauthorizedException();
       }
     }
 
@@ -122,19 +119,22 @@ export class StaffService {
     id: string,
     updateStaffDto: UpdateStaffDto,
   ): Promise<StaffFrontEnd> {
-    
-    if (staff !== undefined) {
-      const requestAccountResult = await this.prisma.staff.findUniqueOrThrow({
-        where: {
-          id: staff.sub
-        }
-      })
 
-      if (requestAccountResult.role !== 'ADMIN') {
-        throw new UnauthorizedException()
+    const staffCount = await this.prisma.staff.count();
+
+    if (staffCount > 0) {
+      if (!staff) {
+        throw new UnauthorizedException();
+      }
+
+      const requestAccount = await this.prisma.staff.findUniqueOrThrow({
+        where: { id: staff.sub }
+      });
+
+      if (requestAccount.role !== 'ADMIN') {
+        throw new UnauthorizedException();
       }
     }
-
     this.validateVenueAndDutyManagerAssignments(updateStaffDto);
 
     let hashedPassword: string | undefined = undefined;
@@ -218,7 +218,23 @@ export class StaffService {
     return updatedStaff;
   }
 
-  async deleteById(id: string) {
+  async deleteById(id: string, staff: StaffPayload) {
+    const staffCount = await this.prisma.staff.count();
+
+    if (staffCount > 0) {
+      if (!staff) {
+        throw new UnauthorizedException();
+      }
+
+      const requestAccount = await this.prisma.staff.findUniqueOrThrow({
+        where: { id: staff.sub }
+      });
+
+      if (requestAccount.role !== 'ADMIN') {
+        throw new UnauthorizedException();
+      }
+    }
+
     const deletedAccount = await this.prisma.staff.delete({
       where: {
         id: id,

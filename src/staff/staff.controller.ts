@@ -45,7 +45,7 @@ export class StaffController {
   }
 
   @Delete(':id')
-  deleteById(@Param('id') id: string) {
-    return this.staffService.deleteById(id);
+  deleteById(@Param('id') id: string, @Staff() staff: StaffPayload,) {
+    return this.staffService.deleteById(id, staff);
   }
 }
