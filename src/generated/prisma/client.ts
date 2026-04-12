@@ -70,6 +70,11 @@ export type BannedPerson = Prisma.BannedPersonModel
  */
 export type Ban = Prisma.BanModel
 /**
+ * Model Alert
+ * 
+ */
+export type Alert = Prisma.AlertModel
+/**
  * Model VenueBan
  * 
  */

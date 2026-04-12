@@ -20,6 +20,7 @@ model Staff {
   venueManagerAssignments VenueManager[]
   dutyManagerAssignments  DutyManager[]
   bansCreated             Ban[]          @relation("BanCreator")
+  alerts                  Alert[]        @relation("AlertCreator")
 }
 
 enum Role {
@@ -102,6 +103,16 @@ model Ban {
   person    BannedPerson @relation(fields: [personId], references: [id], onDelete: Cascade)
   createdBy Staff        @relation("BanCreator", fields: [createdById], references: [id])
   venueBans VenueBan[] // Individual venue-level bans with specific end dates
+}
+
+model Alert {
+  id          String   @id @default(uuid())
+  personId    String?
+  reason      String
+  imagePath   String?
+  startDate   DateTime @default(now())
+  createdById String
+  createdBy   Staff    @relation("AlertCreator", fields: [createdById], references: [id])
 }
 
 enum BanStatus {

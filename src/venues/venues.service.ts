@@ -1,11 +1,16 @@
-import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
-import { CreateVenueDto } from './dto/create-venue.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma } from '../generated/prisma/client'
-import sharp from 'sharp';
-import * as fs from 'fs';
-import { UpdateVenueDto } from './dto/update-venue.dto';
-import { StaffPayload } from 'src/utils/types';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from "@nestjs/common";
+import * as fs from "fs";
+import sharp from "sharp";
+import { PrismaService } from "src/prisma/prisma.service";
+import  { StaffPayload } from "src/utils/types";
+import { Prisma } from "../generated/prisma/client";
+import  { CreateVenueDto } from "./dto/create-venue.dto";
+import  { UpdateVenueDto } from "./dto/update-venue.dto";
 
 @Injectable()
 export class VenuesService {
@@ -17,19 +22,22 @@ export class VenuesService {
     file: Express.Multer.File,
     createVenueDto: CreateVenueDto,
   ) {
+    if (!file) {
+      throw new BadRequestException("No image was given");
+    }
 
     const venueCount = await this.prisma.venue.count();
-    
+
     if (venueCount > 0) {
       if (!staff) {
         throw new UnauthorizedException();
       }
 
       const requestAccount = await this.prisma.staff.findUniqueOrThrow({
-        where: { id: staff.sub }
+        where: { id: staff.id },
       });
 
-      if (requestAccount.role !== 'ADMIN') {
+      if (requestAccount.role !== "ADMIN") {
         throw new UnauthorizedException();
       }
     }
@@ -42,7 +50,7 @@ export class VenuesService {
       await fs.promises.unlink(file.path);
     } catch (error) {
       await fs.promises.unlink(file.path).catch(() => { });
-      throw new InternalServerErrorException('Image processing failed');
+      throw new InternalServerErrorException("Image processing failed");
     }
 
     const newVenue = await this.prisma.$transaction(async (tx) => {
@@ -73,13 +81,19 @@ export class VenuesService {
   }
 
   async findAll(baseUrl: string) {
-    const allVenues = await this.prisma.venue.findMany({ include: { venueManagers: true, dutyManagers: true } });
+    const allVenues = await this.prisma.venue.findMany({
+      include: { venueManagers: true, dutyManagers: true },
+    });
     return allVenues.map((venue) => {
       return {
         ...venue,
         imagePath: `${baseUrl}/uploads/compressed/venues/${venue.imagePath}`,
       };
     });
+  }
+
+  async findVenueCount() {
+    return await this.prisma.venue.count();
   }
 
   async findOneById(baseUrl: string, id: string) {
@@ -110,10 +124,10 @@ export class VenuesService {
       }
 
       const requestAccount = await this.prisma.staff.findUniqueOrThrow({
-        where: { id: staff.sub }
+        where: { id: staff.id },
       });
 
-      if (requestAccount.role !== 'ADMIN') {
+      if (requestAccount.role !== "ADMIN") {
         throw new UnauthorizedException();
       }
     }
@@ -126,7 +140,7 @@ export class VenuesService {
       await fs.promises.unlink(file.path);
     } catch (error) {
       await fs.promises.unlink(file.path).catch(() => { });
-      throw new InternalServerErrorException('Image processing failed');
+      throw new InternalServerErrorException("Image processing failed");
     }
 
     const updatedVenue = await this.prisma.$transaction(async (tx) => {
@@ -196,13 +210,13 @@ export class VenuesService {
       });
     });
 
-    return 'Venue has been deleted';
+    return "Venue has been deleted";
   }
 
   private async addVenueAndDutyManagersToVenue(
     venueId: string,
     venueDto: CreateVenueDto | UpdateVenueDto,
-    tx: Prisma.TransactionClient
+    tx: Prisma.TransactionClient,
   ) {
     if (venueDto.venueManagers) {
       const venueManagerIds = await tx.staff.findMany({

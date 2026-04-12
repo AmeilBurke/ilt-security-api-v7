@@ -18,7 +18,10 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     prefix: '/uploads',
   });
-  console.log('DB URL defined:', !!process.env.DATABASE_URL);
+  app.enableCors({
+    origin: ['http://192.168.1.95:5173', 'http://localhost:5173'], // your Vite dev server
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  });
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

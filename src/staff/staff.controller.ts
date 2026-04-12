@@ -1,51 +1,60 @@
 import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Param,
-  Patch,
-  Delete,
-  Req,
-} from '@nestjs/common';
-import { StaffService } from './staff.service';
-import { CreateStaffDto } from './dto/create-staff.dto';
-import { UpdateStaffDto } from './dto/update-staff.dto';
-import { Public } from 'src/authentication/public.decorator';
-import type { StaffPayload } from 'src/utils/types';
-import { Staff } from './staff.decorator';
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	Patch,
+	Post,
+	Req,
+} from "@nestjs/common";
+import { Public } from "src/authentication/public.decorator";
+import { StaffPayload } from "src/utils/types";
+import { CreateStaffDto } from "./dto/create-staff.dto";
+import { UpdateStaffDto } from "./dto/update-staff.dto";
+import { Staff } from "./staff.decorator";
+import { StaffService } from "./staff.service";
 
-@Controller('staff')
+@Controller("staff")
 export class StaffController {
-  constructor(private readonly staffService: StaffService) { }
+	constructor(private readonly staffService: StaffService) {}
 
-  @Public()
-  @Post()
-  create(@Body() createStaffDto: CreateStaffDto, @Staff() staff?: StaffPayload,) {
-    return this.staffService.create(createStaffDto, staff);
-  }
+	@Public()
+	@Post()
+	create(
+		@Body() createStaffDto: CreateStaffDto,
+		@Staff() staff?: StaffPayload,
+	) {
+		return this.staffService.create(createStaffDto, staff);
+	}
 
-  @Get()
-  findAll() {
-    return this.staffService.findAll();
-  }
+	@Get()
+	findAll() {
+		return this.staffService.findAll();
+	}
 
-  @Get(':id')
-  findOneById(@Param('id') id: string) {
-    return this.staffService.findOneById(id);
-  }
+	@Public()
+	@Get("/setup")
+	isSetupDone() {
+		return this.staffService.isSetupDone();
+	}
 
-  @Patch(':id')
-  updateOneById(
-    @Staff() staff: StaffPayload,
-    @Param('id') id: string,
-    @Body() updateStaffDto: UpdateStaffDto,
-  ) {
-    return this.staffService.updateById(staff, id, updateStaffDto);
-  }
+	@Get(":id")
+	findOneById(@Param("id") id: string) {
+		return this.staffService.findOneById(id);
+	}
 
-  @Delete(':id')
-  deleteById(@Param('id') id: string, @Staff() staff: StaffPayload,) {
-    return this.staffService.deleteById(id, staff);
-  }
+	@Patch(":id")
+	updateOneById(
+		@Staff() staff: StaffPayload,
+		@Param("id") id: string,
+		@Body() updateStaffDto: UpdateStaffDto,
+	) {
+		return this.staffService.updateById(staff, id, updateStaffDto);
+	}
+
+	@Delete(":id")
+	deleteById(@Param("id") id: string, @Staff() staff: StaffPayload) {
+		return this.staffService.deleteById(id, staff);
+	}
 }

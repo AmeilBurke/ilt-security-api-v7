@@ -16,7 +16,7 @@
  */
 
 import * as runtime from "@prisma/client/runtime/client"
-import type * as Prisma from "../models.js"
+import  * as Prisma from "../models.js"
 import { type PrismaClient } from "./class.js"
 
 export type * from '../models.js'
@@ -390,6 +390,7 @@ export const ModelName = {
   DutyManager: 'DutyManager',
   BannedPerson: 'BannedPerson',
   Ban: 'Ban',
+  Alert: 'Alert',
   VenueBan: 'VenueBan'
 } as const
 
@@ -406,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "staff" | "venue" | "venueManager" | "dutyManager" | "bannedPerson" | "ban" | "venueBan"
+    modelProps: "staff" | "venue" | "venueManager" | "dutyManager" | "bannedPerson" | "ban" | "alert" | "venueBan"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -854,6 +855,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Alert: {
+      payload: Prisma.$AlertPayload<ExtArgs>
+      fields: Prisma.AlertFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AlertFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlertPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AlertFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlertPayload>
+        }
+        findFirst: {
+          args: Prisma.AlertFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlertPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AlertFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlertPayload>
+        }
+        findMany: {
+          args: Prisma.AlertFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlertPayload>[]
+        }
+        create: {
+          args: Prisma.AlertCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlertPayload>
+        }
+        createMany: {
+          args: Prisma.AlertCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AlertCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlertPayload>[]
+        }
+        delete: {
+          args: Prisma.AlertDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlertPayload>
+        }
+        update: {
+          args: Prisma.AlertUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlertPayload>
+        }
+        deleteMany: {
+          args: Prisma.AlertDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AlertUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AlertUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlertPayload>[]
+        }
+        upsert: {
+          args: Prisma.AlertUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlertPayload>
+        }
+        aggregate: {
+          args: Prisma.AlertAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAlert>
+        }
+        groupBy: {
+          args: Prisma.AlertGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AlertGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AlertCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AlertCountAggregateOutputType> | number
+        }
+      }
+    }
     VenueBan: {
       payload: Prisma.$VenueBanPayload<ExtArgs>
       fields: Prisma.VenueBanFieldRefs
@@ -1029,6 +1104,18 @@ export const BanScalarFieldEnum = {
 } as const
 
 export type BanScalarFieldEnum = (typeof BanScalarFieldEnum)[keyof typeof BanScalarFieldEnum]
+
+
+export const AlertScalarFieldEnum = {
+  id: 'id',
+  personId: 'personId',
+  reason: 'reason',
+  imagePath: 'imagePath',
+  startDate: 'startDate',
+  createdById: 'createdById'
+} as const
+
+export type AlertScalarFieldEnum = (typeof AlertScalarFieldEnum)[keyof typeof AlertScalarFieldEnum]
 
 
 export const VenueBanScalarFieldEnum = {
@@ -1264,6 +1351,7 @@ export type GlobalOmitConfig = {
   dutyManager?: Prisma.DutyManagerOmit
   bannedPerson?: Prisma.BannedPersonOmit
   ban?: Prisma.BanOmit
+  alert?: Prisma.AlertOmit
   venueBan?: Prisma.VenueBanOmit
 }
 

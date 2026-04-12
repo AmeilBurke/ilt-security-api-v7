@@ -5,6 +5,7 @@ import { VenuesModule } from './venues/venues.module';
 import { BannedPeopleModule } from './banned-people/banned-people.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ConfigModule } from '@nestjs/config';
+import { AlertsModule } from './alerts/alerts.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    AlertsModule,
   ],
   controllers: [],
   providers: [],

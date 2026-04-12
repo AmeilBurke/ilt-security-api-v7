@@ -8,9 +8,9 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.js"
-import type * as Prisma from "../internal/prismaNamespace.js"
+import  * as runtime from "@prisma/client/runtime/client"
+import  * as $Enums from "../enums.js"
+import  * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Staff
@@ -185,6 +185,7 @@ export type StaffWhereInput = {
   venueManagerAssignments?: Prisma.VenueManagerListRelationFilter
   dutyManagerAssignments?: Prisma.DutyManagerListRelationFilter
   bansCreated?: Prisma.BanListRelationFilter
+  alerts?: Prisma.AlertListRelationFilter
 }
 
 export type StaffOrderByWithRelationInput = {
@@ -196,6 +197,7 @@ export type StaffOrderByWithRelationInput = {
   venueManagerAssignments?: Prisma.VenueManagerOrderByRelationAggregateInput
   dutyManagerAssignments?: Prisma.DutyManagerOrderByRelationAggregateInput
   bansCreated?: Prisma.BanOrderByRelationAggregateInput
+  alerts?: Prisma.AlertOrderByRelationAggregateInput
 }
 
 export type StaffWhereUniqueInput = Prisma.AtLeast<{
@@ -210,6 +212,7 @@ export type StaffWhereUniqueInput = Prisma.AtLeast<{
   venueManagerAssignments?: Prisma.VenueManagerListRelationFilter
   dutyManagerAssignments?: Prisma.DutyManagerListRelationFilter
   bansCreated?: Prisma.BanListRelationFilter
+  alerts?: Prisma.AlertListRelationFilter
 }, "id" | "email">
 
 export type StaffOrderByWithAggregationInput = {
@@ -243,6 +246,7 @@ export type StaffCreateInput = {
   venueManagerAssignments?: Prisma.VenueManagerCreateNestedManyWithoutStaffInput
   dutyManagerAssignments?: Prisma.DutyManagerCreateNestedManyWithoutStaffInput
   bansCreated?: Prisma.BanCreateNestedManyWithoutCreatedByInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutCreatedByInput
 }
 
 export type StaffUncheckedCreateInput = {
@@ -254,6 +258,7 @@ export type StaffUncheckedCreateInput = {
   venueManagerAssignments?: Prisma.VenueManagerUncheckedCreateNestedManyWithoutStaffInput
   dutyManagerAssignments?: Prisma.DutyManagerUncheckedCreateNestedManyWithoutStaffInput
   bansCreated?: Prisma.BanUncheckedCreateNestedManyWithoutCreatedByInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type StaffUpdateInput = {
@@ -265,6 +270,7 @@ export type StaffUpdateInput = {
   venueManagerAssignments?: Prisma.VenueManagerUpdateManyWithoutStaffNestedInput
   dutyManagerAssignments?: Prisma.DutyManagerUpdateManyWithoutStaffNestedInput
   bansCreated?: Prisma.BanUpdateManyWithoutCreatedByNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutCreatedByNestedInput
 }
 
 export type StaffUncheckedUpdateInput = {
@@ -276,6 +282,7 @@ export type StaffUncheckedUpdateInput = {
   venueManagerAssignments?: Prisma.VenueManagerUncheckedUpdateManyWithoutStaffNestedInput
   dutyManagerAssignments?: Prisma.DutyManagerUncheckedUpdateManyWithoutStaffNestedInput
   bansCreated?: Prisma.BanUncheckedUpdateManyWithoutCreatedByNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type StaffCreateManyInput = {
@@ -381,6 +388,20 @@ export type StaffUpdateOneRequiredWithoutBansCreatedNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutBansCreatedInput, Prisma.StaffUpdateWithoutBansCreatedInput>, Prisma.StaffUncheckedUpdateWithoutBansCreatedInput>
 }
 
+export type StaffCreateNestedOneWithoutAlertsInput = {
+  create?: Prisma.XOR<Prisma.StaffCreateWithoutAlertsInput, Prisma.StaffUncheckedCreateWithoutAlertsInput>
+  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutAlertsInput
+  connect?: Prisma.StaffWhereUniqueInput
+}
+
+export type StaffUpdateOneRequiredWithoutAlertsNestedInput = {
+  create?: Prisma.XOR<Prisma.StaffCreateWithoutAlertsInput, Prisma.StaffUncheckedCreateWithoutAlertsInput>
+  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutAlertsInput
+  upsert?: Prisma.StaffUpsertWithoutAlertsInput
+  connect?: Prisma.StaffWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutAlertsInput, Prisma.StaffUpdateWithoutAlertsInput>, Prisma.StaffUncheckedUpdateWithoutAlertsInput>
+}
+
 export type StaffCreateWithoutVenueManagerAssignmentsInput = {
   id?: string
   email: string
@@ -389,6 +410,7 @@ export type StaffCreateWithoutVenueManagerAssignmentsInput = {
   role: $Enums.Role
   dutyManagerAssignments?: Prisma.DutyManagerCreateNestedManyWithoutStaffInput
   bansCreated?: Prisma.BanCreateNestedManyWithoutCreatedByInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutCreatedByInput
 }
 
 export type StaffUncheckedCreateWithoutVenueManagerAssignmentsInput = {
@@ -399,6 +421,7 @@ export type StaffUncheckedCreateWithoutVenueManagerAssignmentsInput = {
   role: $Enums.Role
   dutyManagerAssignments?: Prisma.DutyManagerUncheckedCreateNestedManyWithoutStaffInput
   bansCreated?: Prisma.BanUncheckedCreateNestedManyWithoutCreatedByInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type StaffCreateOrConnectWithoutVenueManagerAssignmentsInput = {
@@ -425,6 +448,7 @@ export type StaffUpdateWithoutVenueManagerAssignmentsInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   dutyManagerAssignments?: Prisma.DutyManagerUpdateManyWithoutStaffNestedInput
   bansCreated?: Prisma.BanUpdateManyWithoutCreatedByNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutCreatedByNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutVenueManagerAssignmentsInput = {
@@ -435,6 +459,7 @@ export type StaffUncheckedUpdateWithoutVenueManagerAssignmentsInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   dutyManagerAssignments?: Prisma.DutyManagerUncheckedUpdateManyWithoutStaffNestedInput
   bansCreated?: Prisma.BanUncheckedUpdateManyWithoutCreatedByNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type StaffCreateWithoutDutyManagerAssignmentsInput = {
@@ -445,6 +470,7 @@ export type StaffCreateWithoutDutyManagerAssignmentsInput = {
   role: $Enums.Role
   venueManagerAssignments?: Prisma.VenueManagerCreateNestedManyWithoutStaffInput
   bansCreated?: Prisma.BanCreateNestedManyWithoutCreatedByInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutCreatedByInput
 }
 
 export type StaffUncheckedCreateWithoutDutyManagerAssignmentsInput = {
@@ -455,6 +481,7 @@ export type StaffUncheckedCreateWithoutDutyManagerAssignmentsInput = {
   role: $Enums.Role
   venueManagerAssignments?: Prisma.VenueManagerUncheckedCreateNestedManyWithoutStaffInput
   bansCreated?: Prisma.BanUncheckedCreateNestedManyWithoutCreatedByInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type StaffCreateOrConnectWithoutDutyManagerAssignmentsInput = {
@@ -481,6 +508,7 @@ export type StaffUpdateWithoutDutyManagerAssignmentsInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   venueManagerAssignments?: Prisma.VenueManagerUpdateManyWithoutStaffNestedInput
   bansCreated?: Prisma.BanUpdateManyWithoutCreatedByNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutCreatedByNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutDutyManagerAssignmentsInput = {
@@ -491,6 +519,7 @@ export type StaffUncheckedUpdateWithoutDutyManagerAssignmentsInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   venueManagerAssignments?: Prisma.VenueManagerUncheckedUpdateManyWithoutStaffNestedInput
   bansCreated?: Prisma.BanUncheckedUpdateManyWithoutCreatedByNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type StaffCreateWithoutBansCreatedInput = {
@@ -501,6 +530,7 @@ export type StaffCreateWithoutBansCreatedInput = {
   role: $Enums.Role
   venueManagerAssignments?: Prisma.VenueManagerCreateNestedManyWithoutStaffInput
   dutyManagerAssignments?: Prisma.DutyManagerCreateNestedManyWithoutStaffInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutCreatedByInput
 }
 
 export type StaffUncheckedCreateWithoutBansCreatedInput = {
@@ -511,6 +541,7 @@ export type StaffUncheckedCreateWithoutBansCreatedInput = {
   role: $Enums.Role
   venueManagerAssignments?: Prisma.VenueManagerUncheckedCreateNestedManyWithoutStaffInput
   dutyManagerAssignments?: Prisma.DutyManagerUncheckedCreateNestedManyWithoutStaffInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type StaffCreateOrConnectWithoutBansCreatedInput = {
@@ -537,6 +568,7 @@ export type StaffUpdateWithoutBansCreatedInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   venueManagerAssignments?: Prisma.VenueManagerUpdateManyWithoutStaffNestedInput
   dutyManagerAssignments?: Prisma.DutyManagerUpdateManyWithoutStaffNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutCreatedByNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutBansCreatedInput = {
@@ -547,6 +579,67 @@ export type StaffUncheckedUpdateWithoutBansCreatedInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   venueManagerAssignments?: Prisma.VenueManagerUncheckedUpdateManyWithoutStaffNestedInput
   dutyManagerAssignments?: Prisma.DutyManagerUncheckedUpdateManyWithoutStaffNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type StaffCreateWithoutAlertsInput = {
+  id?: string
+  email: string
+  password: string
+  name: string
+  role: $Enums.Role
+  venueManagerAssignments?: Prisma.VenueManagerCreateNestedManyWithoutStaffInput
+  dutyManagerAssignments?: Prisma.DutyManagerCreateNestedManyWithoutStaffInput
+  bansCreated?: Prisma.BanCreateNestedManyWithoutCreatedByInput
+}
+
+export type StaffUncheckedCreateWithoutAlertsInput = {
+  id?: string
+  email: string
+  password: string
+  name: string
+  role: $Enums.Role
+  venueManagerAssignments?: Prisma.VenueManagerUncheckedCreateNestedManyWithoutStaffInput
+  dutyManagerAssignments?: Prisma.DutyManagerUncheckedCreateNestedManyWithoutStaffInput
+  bansCreated?: Prisma.BanUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type StaffCreateOrConnectWithoutAlertsInput = {
+  where: Prisma.StaffWhereUniqueInput
+  create: Prisma.XOR<Prisma.StaffCreateWithoutAlertsInput, Prisma.StaffUncheckedCreateWithoutAlertsInput>
+}
+
+export type StaffUpsertWithoutAlertsInput = {
+  update: Prisma.XOR<Prisma.StaffUpdateWithoutAlertsInput, Prisma.StaffUncheckedUpdateWithoutAlertsInput>
+  create: Prisma.XOR<Prisma.StaffCreateWithoutAlertsInput, Prisma.StaffUncheckedCreateWithoutAlertsInput>
+  where?: Prisma.StaffWhereInput
+}
+
+export type StaffUpdateToOneWithWhereWithoutAlertsInput = {
+  where?: Prisma.StaffWhereInput
+  data: Prisma.XOR<Prisma.StaffUpdateWithoutAlertsInput, Prisma.StaffUncheckedUpdateWithoutAlertsInput>
+}
+
+export type StaffUpdateWithoutAlertsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  venueManagerAssignments?: Prisma.VenueManagerUpdateManyWithoutStaffNestedInput
+  dutyManagerAssignments?: Prisma.DutyManagerUpdateManyWithoutStaffNestedInput
+  bansCreated?: Prisma.BanUpdateManyWithoutCreatedByNestedInput
+}
+
+export type StaffUncheckedUpdateWithoutAlertsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  venueManagerAssignments?: Prisma.VenueManagerUncheckedUpdateManyWithoutStaffNestedInput
+  dutyManagerAssignments?: Prisma.DutyManagerUncheckedUpdateManyWithoutStaffNestedInput
+  bansCreated?: Prisma.BanUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 
@@ -558,12 +651,14 @@ export type StaffCountOutputType = {
   venueManagerAssignments: number
   dutyManagerAssignments: number
   bansCreated: number
+  alerts: number
 }
 
 export type StaffCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   venueManagerAssignments?: boolean | StaffCountOutputTypeCountVenueManagerAssignmentsArgs
   dutyManagerAssignments?: boolean | StaffCountOutputTypeCountDutyManagerAssignmentsArgs
   bansCreated?: boolean | StaffCountOutputTypeCountBansCreatedArgs
+  alerts?: boolean | StaffCountOutputTypeCountAlertsArgs
 }
 
 /**
@@ -597,6 +692,13 @@ export type StaffCountOutputTypeCountBansCreatedArgs<ExtArgs extends runtime.Typ
   where?: Prisma.BanWhereInput
 }
 
+/**
+ * StaffCountOutputType without action
+ */
+export type StaffCountOutputTypeCountAlertsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AlertWhereInput
+}
+
 
 export type StaffSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -607,6 +709,7 @@ export type StaffSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   venueManagerAssignments?: boolean | Prisma.Staff$venueManagerAssignmentsArgs<ExtArgs>
   dutyManagerAssignments?: boolean | Prisma.Staff$dutyManagerAssignmentsArgs<ExtArgs>
   bansCreated?: boolean | Prisma.Staff$bansCreatedArgs<ExtArgs>
+  alerts?: boolean | Prisma.Staff$alertsArgs<ExtArgs>
   _count?: boolean | Prisma.StaffCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["staff"]>
 
@@ -639,6 +742,7 @@ export type StaffInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   venueManagerAssignments?: boolean | Prisma.Staff$venueManagerAssignmentsArgs<ExtArgs>
   dutyManagerAssignments?: boolean | Prisma.Staff$dutyManagerAssignmentsArgs<ExtArgs>
   bansCreated?: boolean | Prisma.Staff$bansCreatedArgs<ExtArgs>
+  alerts?: boolean | Prisma.Staff$alertsArgs<ExtArgs>
   _count?: boolean | Prisma.StaffCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StaffIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -650,6 +754,7 @@ export type $StaffPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     venueManagerAssignments: Prisma.$VenueManagerPayload<ExtArgs>[]
     dutyManagerAssignments: Prisma.$DutyManagerPayload<ExtArgs>[]
     bansCreated: Prisma.$BanPayload<ExtArgs>[]
+    alerts: Prisma.$AlertPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1054,6 +1159,7 @@ export interface Prisma__StaffClient<T, Null = never, ExtArgs extends runtime.Ty
   venueManagerAssignments<T extends Prisma.Staff$venueManagerAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$venueManagerAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VenueManagerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dutyManagerAssignments<T extends Prisma.Staff$dutyManagerAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$dutyManagerAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DutyManagerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   bansCreated<T extends Prisma.Staff$bansCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$bansCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  alerts<T extends Prisma.Staff$alertsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$alertsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1550,6 +1656,30 @@ export type Staff$bansCreatedArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.BanScalarFieldEnum | Prisma.BanScalarFieldEnum[]
+}
+
+/**
+ * Staff.alerts
+ */
+export type Staff$alertsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Alert
+   */
+  select?: Prisma.AlertSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Alert
+   */
+  omit?: Prisma.AlertOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AlertInclude<ExtArgs> | null
+  where?: Prisma.AlertWhereInput
+  orderBy?: Prisma.AlertOrderByWithRelationInput | Prisma.AlertOrderByWithRelationInput[]
+  cursor?: Prisma.AlertWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AlertScalarFieldEnum | Prisma.AlertScalarFieldEnum[]
 }
 
 /**

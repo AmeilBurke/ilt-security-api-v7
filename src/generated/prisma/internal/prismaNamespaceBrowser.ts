@@ -57,6 +57,7 @@ export const ModelName = {
   DutyManager: 'DutyManager',
   BannedPerson: 'BannedPerson',
   Ban: 'Ban',
+  Alert: 'Alert',
   VenueBan: 'VenueBan'
 } as const
 
@@ -138,6 +139,18 @@ export const BanScalarFieldEnum = {
 } as const
 
 export type BanScalarFieldEnum = (typeof BanScalarFieldEnum)[keyof typeof BanScalarFieldEnum]
+
+
+export const AlertScalarFieldEnum = {
+  id: 'id',
+  personId: 'personId',
+  reason: 'reason',
+  imagePath: 'imagePath',
+  startDate: 'startDate',
+  createdById: 'createdById'
+} as const
+
+export type AlertScalarFieldEnum = (typeof AlertScalarFieldEnum)[keyof typeof AlertScalarFieldEnum]
 
 
 export const VenueBanScalarFieldEnum = {
