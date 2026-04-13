@@ -22,7 +22,7 @@ import { UpdateBannedPersonDto } from "./dto/update-banned-person.dto";
 
 @Controller("banned-people")
 export class BannedPeopleController {
-	constructor(private readonly bannedPeopleService: BannedPeopleService) {}
+	constructor(private readonly bannedPeopleService: BannedPeopleService) { }
 
 	@Post()
 	@UseInterceptors(
@@ -66,6 +66,12 @@ export class BannedPeopleController {
 	findAllByVenueId(@Req() req: express.Request, @Param("id") id: string) {
 		const baseUrl = getBaseUrl(req);
 		return this.bannedPeopleService.findAllByVenueId(baseUrl, id);
+	}
+
+	@Get("/pending")
+	findAllPending(@Req() req: express.Request, @Staff() staff: StaffPayload,) {
+		const baseUrl = getBaseUrl(req);
+		return this.bannedPeopleService.findAllPending(baseUrl, staff);
 	}
 
 	@Get(":id")

@@ -1,14 +1,14 @@
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import * as fs from "fs";
 import sharp from "sharp";
 import { PrismaService } from "src/prisma/prisma.service";
-import  { StaffPayload } from "src/utils/types";
-import  { CreateBannedPersonDto } from "./dto/create-banned-person.dto";
-import  { UpdateBannedPersonDto } from "./dto/update-banned-person.dto";
+import { StaffPayload } from "src/utils/types";
+import { CreateBannedPersonDto } from "./dto/create-banned-person.dto";
+import { UpdateBannedPersonDto } from "./dto/update-banned-person.dto";
 
 @Injectable()
 export class BannedPeopleService {
-	constructor(private prisma: PrismaService) {}
+	constructor(private prisma: PrismaService) { }
 
 	async create(
 		baseUrl: string,
@@ -16,6 +16,11 @@ export class BannedPeopleService {
 		file: Express.Multer.File,
 		createBannedPersonDto: CreateBannedPersonDto,
 	) {
+
+		if (!file) {
+			throw new BadRequestException("No image was given")
+		}
+
 		try {
 			await sharp(file.path)
 				.webp({ quality: 75 })
@@ -23,7 +28,7 @@ export class BannedPeopleService {
 
 			await fs.promises.unlink(file.path);
 		} catch (error) {
-			await fs.promises.unlink(file.path).catch(() => {});
+			await fs.promises.unlink(file.path).catch(() => { });
 			throw new InternalServerErrorException("Image processing failed");
 		}
 
@@ -47,13 +52,13 @@ export class BannedPeopleService {
 			const ban = await tx.ban.create({
 				data: {
 					personId: bannedPerson.id,
-					createdById: requestAccount.id, // need to swap with id from jwt token when added
+					createdById: requestAccount.id,
 					reason: createBannedPersonDto.reason,
 					notes: createBannedPersonDto.notes,
 					startDate: createBannedPersonDto.startDate,
 					duration: createBannedPersonDto.duration,
 					isBlanketBan: Boolean(createBannedPersonDto.isBlanketBan),
-					status: "PENDING", // change to approved if upload is done by an admin
+					status: requestAccount.role === "ADMIN" ? "APPROVED" : "PENDING"
 				},
 			});
 
@@ -115,6 +120,30 @@ export class BannedPeopleService {
 		});
 	}
 
+	async findAllPending(baseUrl: string, staff: StaffPayload) {
+		const findAllWithPendingBan = await this.prisma.bannedPerson.findMany({
+			where: {
+				bans: {
+					some: {
+						status: {
+							equals: "PENDING"
+						},
+					},
+				},
+			},
+			include: {
+				bans: true,
+			},
+		});
+
+		return findAllWithPendingBan.map((person) => {
+			return {
+				...person,
+				imagePath: `${baseUrl}/uploads/compressed/people/${person.imagePath}`,
+			};
+		});
+	}
+
 	async findOneById(baseUrl: string, id: string) {
 		const person = await this.prisma.bannedPerson.findMany({
 			where: {
@@ -156,7 +185,7 @@ export class BannedPeopleService {
 					`uploads/compressed/people/${outdatedDetails?.imagePath}`,
 				);
 			} catch (error) {
-				await fs.promises.unlink(file.path).catch(() => {});
+				await fs.promises.unlink(file.path).catch(() => { });
 				throw new InternalServerErrorException("Image processing failed");
 			}
 		}

@@ -68,7 +68,11 @@ export class AlertsService {
 	async findAll(baseUrl: string) {
 		const alerts = await this.prisma.alert.findMany({
 			include: {
-				createdBy: true
+				createdBy: {
+					select: {
+						name: true
+					}
+				}
 			}
 		});
 		return alerts.map((alert) => {
