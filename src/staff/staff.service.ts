@@ -116,9 +116,10 @@ export class StaffService {
 	}
 
 	async findOneByEmail(email: string) {
+		// make email .tolowercase()
 		return await this.prisma.staff.findUniqueOrThrow({
 			where: {
-				email: email,
+				email: email.toLowerCase(),
 			},
 		});
 	}

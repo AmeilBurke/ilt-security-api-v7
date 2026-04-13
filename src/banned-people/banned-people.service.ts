@@ -78,6 +78,9 @@ export class BannedPeopleService {
 				bans: {
 					some: {
 						isBlanketBan: true,
+						// NOT: {
+						// 	status: "PENDING"
+						// }
 					},
 				},
 			},
