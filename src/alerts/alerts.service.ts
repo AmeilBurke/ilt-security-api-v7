@@ -104,15 +104,18 @@ export class AlertsService {
 	async removeOneById(id: string): Promise<string> {
 		const alertToDelete = await this.prisma.alert.findUniqueOrThrow({
 			where: { id },
-			select: { imagePath: true },
+			select: {
+				personId: true,
+				imagePath: true
+			},
 		});
 
-		if (alertToDelete.imagePath) {
+		if (!alertToDelete.personId) {
 			await fs.promises.rm(
 				path.join(this.ALERT_IMAGE_FOLDER, alertToDelete.imagePath)
 			);
 		}
-		
+
 		await this.prisma.alert.delete({ where: { id } });
 		return 'Deleted alert'
 	}
