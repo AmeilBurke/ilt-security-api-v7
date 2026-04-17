@@ -80,6 +80,12 @@ export class BannedPeopleController {
 		return this.bannedPeopleService.findOneById(baseUrl, id);
 	}
 
+	@Get()
+	findAll(@Req() req: express.Request) {
+		const baseUrl = getBaseUrl(req);
+		return this.bannedPeopleService.findAll(baseUrl);
+	}
+
 	@Patch(":id")
 	@UseInterceptors(
 		FileInterceptor("image", {

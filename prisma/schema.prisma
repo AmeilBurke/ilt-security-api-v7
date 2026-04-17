@@ -109,7 +109,7 @@ model Alert {
   id          String   @id @default(uuid())
   personId    String?
   reason      String
-  imagePath   String?
+  imagePath   String
   startDate   DateTime @default(now())
   createdById String
   createdBy   Staff    @relation("AlertCreator", fields: [createdById], references: [id])

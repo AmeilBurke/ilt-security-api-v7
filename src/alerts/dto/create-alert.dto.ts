@@ -7,8 +7,4 @@ export class CreateAlertDto {
 
     @IsString()
     reason!: string
-
-    @IsOptional()
-    @IsString()
-    imagePath?: string
 }

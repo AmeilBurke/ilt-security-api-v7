@@ -70,7 +70,6 @@ export class BannedPeopleService {
 			imagePath: `${baseUrl}/uploads/compressed/people/${newBannedPerson.imagePath}`,
 		};
 	}
-	// need to test in postman
 
 	async findAllBlanketBanned(baseUrl: string) {
 		const blanketBanned = await this.prisma.bannedPerson.findMany({
@@ -156,6 +155,17 @@ export class BannedPeopleService {
 				bans: true,
 			},
 		});
+
+		return person.map((details) => {
+			return {
+				...details,
+				imagePath: `${baseUrl}/uploads/compressed/people/${details.imagePath}`,
+			};
+		});
+	}
+
+	async findAll(baseUrl: string) {
+		const person = await this.prisma.bannedPerson.findMany();
 
 		return person.map((details) => {
 			return {

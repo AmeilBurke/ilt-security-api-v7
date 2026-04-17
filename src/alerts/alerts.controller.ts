@@ -56,6 +56,11 @@ export class AlertsController {
     return this.alertsService.findAll(baseUrl);
   }
 
+  @Delete(':id')
+  removeOneById(@Param("id") id: string) {
+    return this.alertsService.removeOneById(id);
+  }
+
   @Delete()
   removeAll() {
     return this.alertsService.removeAll();

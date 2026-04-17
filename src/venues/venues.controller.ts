@@ -108,6 +108,7 @@ export class VenuesController {
 		);
 	}
 
+	// need to delete image at same time
 	@Delete(":id")
 	deleteOneById(@Req() req: express.Request, @Param("id") id: string) {
 		return this.venuesService.deleteOneById(id);

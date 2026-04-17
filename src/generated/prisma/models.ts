@@ -8,12 +8,12 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Staff.js'
-export type * from './models/Venue.js'
-export type * from './models/VenueManager.js'
-export type * from './models/DutyManager.js'
-export type * from './models/BannedPerson.js'
-export type * from './models/Ban.js'
-export type * from './models/Alert.js'
-export type * from './models/VenueBan.js'
-export type * from './commonInputTypes.js'
+export type * from './models/Staff'
+export type * from './models/Venue'
+export type * from './models/VenueManager'
+export type * from './models/DutyManager'
+export type * from './models/BannedPerson'
+export type * from './models/Ban'
+export type * from './models/Alert'
+export type * from './models/VenueBan'
+export type * from './commonInputTypes'

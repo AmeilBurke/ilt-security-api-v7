@@ -8,9 +8,9 @@
  *
  * 🟢 You can import this file directly.
  */
-import  * as runtime from "@prisma/client/runtime/client"
-import  * as $Enums from "../enums.js"
-import  * as Prisma from "../internal/prismaNamespace.js"
+import type * as runtime from "@prisma/client/runtime/client"
+import type * as $Enums from "../enums"
+import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model Alert
@@ -157,7 +157,7 @@ export type AlertGroupByOutputType = {
   id: string
   personId: string | null
   reason: string
-  imagePath: string | null
+  imagePath: string
   startDate: Date
   createdById: string
   _count: AlertCountAggregateOutputType | null
@@ -187,7 +187,7 @@ export type AlertWhereInput = {
   id?: Prisma.StringFilter<"Alert"> | string
   personId?: Prisma.StringNullableFilter<"Alert"> | string | null
   reason?: Prisma.StringFilter<"Alert"> | string
-  imagePath?: Prisma.StringNullableFilter<"Alert"> | string | null
+  imagePath?: Prisma.StringFilter<"Alert"> | string
   startDate?: Prisma.DateTimeFilter<"Alert"> | Date | string
   createdById?: Prisma.StringFilter<"Alert"> | string
   createdBy?: Prisma.XOR<Prisma.StaffScalarRelationFilter, Prisma.StaffWhereInput>
@@ -197,7 +197,7 @@ export type AlertOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   personId?: Prisma.SortOrderInput | Prisma.SortOrder
   reason?: Prisma.SortOrder
-  imagePath?: Prisma.SortOrderInput | Prisma.SortOrder
+  imagePath?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdBy?: Prisma.StaffOrderByWithRelationInput
@@ -210,7 +210,7 @@ export type AlertWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.AlertWhereInput | Prisma.AlertWhereInput[]
   personId?: Prisma.StringNullableFilter<"Alert"> | string | null
   reason?: Prisma.StringFilter<"Alert"> | string
-  imagePath?: Prisma.StringNullableFilter<"Alert"> | string | null
+  imagePath?: Prisma.StringFilter<"Alert"> | string
   startDate?: Prisma.DateTimeFilter<"Alert"> | Date | string
   createdById?: Prisma.StringFilter<"Alert"> | string
   createdBy?: Prisma.XOR<Prisma.StaffScalarRelationFilter, Prisma.StaffWhereInput>
@@ -220,7 +220,7 @@ export type AlertOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   personId?: Prisma.SortOrderInput | Prisma.SortOrder
   reason?: Prisma.SortOrder
-  imagePath?: Prisma.SortOrderInput | Prisma.SortOrder
+  imagePath?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   _count?: Prisma.AlertCountOrderByAggregateInput
@@ -235,7 +235,7 @@ export type AlertScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Alert"> | string
   personId?: Prisma.StringNullableWithAggregatesFilter<"Alert"> | string | null
   reason?: Prisma.StringWithAggregatesFilter<"Alert"> | string
-  imagePath?: Prisma.StringNullableWithAggregatesFilter<"Alert"> | string | null
+  imagePath?: Prisma.StringWithAggregatesFilter<"Alert"> | string
   startDate?: Prisma.DateTimeWithAggregatesFilter<"Alert"> | Date | string
   createdById?: Prisma.StringWithAggregatesFilter<"Alert"> | string
 }
@@ -244,7 +244,7 @@ export type AlertCreateInput = {
   id?: string
   personId?: string | null
   reason: string
-  imagePath?: string | null
+  imagePath: string
   startDate?: Date | string
   createdBy: Prisma.StaffCreateNestedOneWithoutAlertsInput
 }
@@ -253,7 +253,7 @@ export type AlertUncheckedCreateInput = {
   id?: string
   personId?: string | null
   reason: string
-  imagePath?: string | null
+  imagePath: string
   startDate?: Date | string
   createdById: string
 }
@@ -262,7 +262,7 @@ export type AlertUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   personId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.StringFieldUpdateOperationsInput | string
-  imagePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StaffUpdateOneRequiredWithoutAlertsNestedInput
 }
@@ -271,7 +271,7 @@ export type AlertUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   personId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.StringFieldUpdateOperationsInput | string
-  imagePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -280,7 +280,7 @@ export type AlertCreateManyInput = {
   id?: string
   personId?: string | null
   reason: string
-  imagePath?: string | null
+  imagePath: string
   startDate?: Date | string
   createdById: string
 }
@@ -289,7 +289,7 @@ export type AlertUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   personId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.StringFieldUpdateOperationsInput | string
-  imagePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -297,7 +297,7 @@ export type AlertUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   personId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.StringFieldUpdateOperationsInput | string
-  imagePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -385,7 +385,7 @@ export type AlertCreateWithoutCreatedByInput = {
   id?: string
   personId?: string | null
   reason: string
-  imagePath?: string | null
+  imagePath: string
   startDate?: Date | string
 }
 
@@ -393,7 +393,7 @@ export type AlertUncheckedCreateWithoutCreatedByInput = {
   id?: string
   personId?: string | null
   reason: string
-  imagePath?: string | null
+  imagePath: string
   startDate?: Date | string
 }
 
@@ -430,7 +430,7 @@ export type AlertScalarWhereInput = {
   id?: Prisma.StringFilter<"Alert"> | string
   personId?: Prisma.StringNullableFilter<"Alert"> | string | null
   reason?: Prisma.StringFilter<"Alert"> | string
-  imagePath?: Prisma.StringNullableFilter<"Alert"> | string | null
+  imagePath?: Prisma.StringFilter<"Alert"> | string
   startDate?: Prisma.DateTimeFilter<"Alert"> | Date | string
   createdById?: Prisma.StringFilter<"Alert"> | string
 }
@@ -439,7 +439,7 @@ export type AlertCreateManyCreatedByInput = {
   id?: string
   personId?: string | null
   reason: string
-  imagePath?: string | null
+  imagePath: string
   startDate?: Date | string
 }
 
@@ -447,7 +447,7 @@ export type AlertUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   personId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.StringFieldUpdateOperationsInput | string
-  imagePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -455,7 +455,7 @@ export type AlertUncheckedUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   personId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.StringFieldUpdateOperationsInput | string
-  imagePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -463,7 +463,7 @@ export type AlertUncheckedUpdateManyWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   personId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.StringFieldUpdateOperationsInput | string
-  imagePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -528,7 +528,7 @@ export type $AlertPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     personId: string | null
     reason: string
-    imagePath: string | null
+    imagePath: string
     startDate: Date
     createdById: string
   }, ExtArgs["result"]["alert"]>
