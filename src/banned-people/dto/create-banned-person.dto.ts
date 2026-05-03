@@ -1,26 +1,26 @@
-import { IsBoolean, IsBooleanString, IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
-import { BanDuration } from 'src/generated/prisma/client';
+import { IsArray, IsBooleanString, IsDateString, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateBannedPersonDto {
   @IsString()
-  name: string;
-
-  // @IsString()
-  // createdById: string;
+  name!: string;
 
   @IsString()
-  reason: string;
+  reason!: string;
 
   @IsOptional()
   @IsString()
   notes?: string;
 
   @IsDateString()
-  startDate: Date;
+  startDate!: Date;
 
-  @IsEnum(BanDuration)
-  duration: BanDuration;
+  @IsDateString()
+  endDate!: Date;
 
   @IsBooleanString()
   isBlanketBan?: string;
+
+  @IsArray()
+  @IsUUID('4', { each: true })
+  venueIds!: string[]
 }

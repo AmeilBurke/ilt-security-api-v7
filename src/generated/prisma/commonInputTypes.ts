@@ -90,13 +90,6 @@ export type DateTimeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDateTimeFilter<$PrismaModel> | Date | string
 }
 
-export type EnumBanDurationFilter<$PrismaModel = never> = {
-  equals?: $Enums.BanDuration | Prisma.EnumBanDurationFieldRefInput<$PrismaModel>
-  in?: $Enums.BanDuration[] | Prisma.ListEnumBanDurationFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BanDuration[] | Prisma.ListEnumBanDurationFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBanDurationFilter<$PrismaModel> | $Enums.BanDuration
-}
-
 export type BoolFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
@@ -144,16 +137,6 @@ export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
-}
-
-export type EnumBanDurationWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.BanDuration | Prisma.EnumBanDurationFieldRefInput<$PrismaModel>
-  in?: $Enums.BanDuration[] | Prisma.ListEnumBanDurationFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BanDuration[] | Prisma.ListEnumBanDurationFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBanDurationWithAggregatesFilter<$PrismaModel> | $Enums.BanDuration
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumBanDurationFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumBanDurationFilter<$PrismaModel>
 }
 
 export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -258,13 +241,6 @@ export type NestedDateTimeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDateTimeFilter<$PrismaModel> | Date | string
 }
 
-export type NestedEnumBanDurationFilter<$PrismaModel = never> = {
-  equals?: $Enums.BanDuration | Prisma.EnumBanDurationFieldRefInput<$PrismaModel>
-  in?: $Enums.BanDuration[] | Prisma.ListEnumBanDurationFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BanDuration[] | Prisma.ListEnumBanDurationFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBanDurationFilter<$PrismaModel> | $Enums.BanDuration
-}
-
 export type NestedBoolFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
@@ -317,16 +293,6 @@ export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
-}
-
-export type NestedEnumBanDurationWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.BanDuration | Prisma.EnumBanDurationFieldRefInput<$PrismaModel>
-  in?: $Enums.BanDuration[] | Prisma.ListEnumBanDurationFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BanDuration[] | Prisma.ListEnumBanDurationFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBanDurationWithAggregatesFilter<$PrismaModel> | $Enums.BanDuration
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumBanDurationFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumBanDurationFilter<$PrismaModel>
 }
 
 export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {

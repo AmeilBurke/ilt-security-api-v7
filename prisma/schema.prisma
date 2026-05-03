@@ -76,10 +76,11 @@ model DutyManager {
 // ============================================
 
 model BannedPerson {
-  id        String @id @default(uuid())
+  id        String  @id @default(uuid())
   name      String
   imagePath String
   bans      Ban[]
+  alerts    Alert[]
 }
 
 // ============================================
@@ -93,7 +94,6 @@ model Ban {
   reason      String
   notes       String?
   startDate   DateTime    @default(now()) // When the incident occurred
-  duration    BanDuration // 1, 3, 6 months, 1 or 2 years
 
   // Ban type and scope
   isBlanketBan Boolean   @default(false) // True = applies to all venues, False = specific venues
@@ -106,13 +106,14 @@ model Ban {
 }
 
 model Alert {
-  id          String   @id @default(uuid())
-  personId    String?
-  reason      String
-  imagePath   String
-  startDate   DateTime @default(now())
-  createdById String
-  createdBy   Staff    @relation("AlertCreator", fields: [createdById], references: [id])
+  id           String        @id @default(uuid())
+  personId     String?
+  reason       String
+  imagePath    String
+  startDate    DateTime      @default(now())
+  createdById  String
+  createdBy    Staff         @relation("AlertCreator", fields: [createdById], references: [id])
+  bannedPerson BannedPerson? @relation(fields: [personId], references: [id])
 }
 
 enum BanStatus {
@@ -120,14 +121,6 @@ enum BanStatus {
   APPROVED // Active ban
   DENIED // Rejected by approver
   EXPIRED // Past end date
-}
-
-enum BanDuration {
-  ONE_MONTH
-  THREE_MONTHS
-  SIX_MONTHS
-  ONE_YEAR
-  TWO_YEARS
 }
 
 // ============================================
@@ -139,9 +132,7 @@ model VenueBan {
   id        String   @id @default(uuid())
   banId     String
   venueId   String
-  startDate DateTime @default(now())
   endDate   DateTime // Can be modified independently per venue
-  isActive  Boolean  @default(true)
 
   ban   Ban   @relation(fields: [banId], references: [id], onDelete: Cascade)
   venue Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)

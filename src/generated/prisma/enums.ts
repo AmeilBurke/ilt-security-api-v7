@@ -27,14 +27,3 @@ export const BanStatus = {
 } as const
 
 export type BanStatus = (typeof BanStatus)[keyof typeof BanStatus]
-
-
-export const BanDuration = {
-  ONE_MONTH: 'ONE_MONTH',
-  THREE_MONTHS: 'THREE_MONTHS',
-  SIX_MONTHS: 'SIX_MONTHS',
-  ONE_YEAR: 'ONE_YEAR',
-  TWO_YEARS: 'TWO_YEARS'
-} as const
-
-export type BanDuration = (typeof BanDuration)[keyof typeof BanDuration]

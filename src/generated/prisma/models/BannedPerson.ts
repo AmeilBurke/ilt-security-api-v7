@@ -167,6 +167,7 @@ export type BannedPersonWhereInput = {
   name?: Prisma.StringFilter<"BannedPerson"> | string
   imagePath?: Prisma.StringFilter<"BannedPerson"> | string
   bans?: Prisma.BanListRelationFilter
+  alerts?: Prisma.AlertListRelationFilter
 }
 
 export type BannedPersonOrderByWithRelationInput = {
@@ -174,6 +175,7 @@ export type BannedPersonOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   imagePath?: Prisma.SortOrder
   bans?: Prisma.BanOrderByRelationAggregateInput
+  alerts?: Prisma.AlertOrderByRelationAggregateInput
 }
 
 export type BannedPersonWhereUniqueInput = Prisma.AtLeast<{
@@ -184,6 +186,7 @@ export type BannedPersonWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"BannedPerson"> | string
   imagePath?: Prisma.StringFilter<"BannedPerson"> | string
   bans?: Prisma.BanListRelationFilter
+  alerts?: Prisma.AlertListRelationFilter
 }, "id">
 
 export type BannedPersonOrderByWithAggregationInput = {
@@ -209,6 +212,7 @@ export type BannedPersonCreateInput = {
   name: string
   imagePath: string
   bans?: Prisma.BanCreateNestedManyWithoutPersonInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBannedPersonInput
 }
 
 export type BannedPersonUncheckedCreateInput = {
@@ -216,6 +220,7 @@ export type BannedPersonUncheckedCreateInput = {
   name: string
   imagePath: string
   bans?: Prisma.BanUncheckedCreateNestedManyWithoutPersonInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBannedPersonInput
 }
 
 export type BannedPersonUpdateInput = {
@@ -223,6 +228,7 @@ export type BannedPersonUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   bans?: Prisma.BanUpdateManyWithoutPersonNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBannedPersonNestedInput
 }
 
 export type BannedPersonUncheckedUpdateInput = {
@@ -230,6 +236,7 @@ export type BannedPersonUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   bans?: Prisma.BanUncheckedUpdateManyWithoutPersonNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBannedPersonNestedInput
 }
 
 export type BannedPersonCreateManyInput = {
@@ -273,6 +280,11 @@ export type BannedPersonScalarRelationFilter = {
   isNot?: Prisma.BannedPersonWhereInput
 }
 
+export type BannedPersonNullableScalarRelationFilter = {
+  is?: Prisma.BannedPersonWhereInput | null
+  isNot?: Prisma.BannedPersonWhereInput | null
+}
+
 export type BannedPersonCreateNestedOneWithoutBansInput = {
   create?: Prisma.XOR<Prisma.BannedPersonCreateWithoutBansInput, Prisma.BannedPersonUncheckedCreateWithoutBansInput>
   connectOrCreate?: Prisma.BannedPersonCreateOrConnectWithoutBansInput
@@ -287,16 +299,34 @@ export type BannedPersonUpdateOneRequiredWithoutBansNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BannedPersonUpdateToOneWithWhereWithoutBansInput, Prisma.BannedPersonUpdateWithoutBansInput>, Prisma.BannedPersonUncheckedUpdateWithoutBansInput>
 }
 
+export type BannedPersonCreateNestedOneWithoutAlertsInput = {
+  create?: Prisma.XOR<Prisma.BannedPersonCreateWithoutAlertsInput, Prisma.BannedPersonUncheckedCreateWithoutAlertsInput>
+  connectOrCreate?: Prisma.BannedPersonCreateOrConnectWithoutAlertsInput
+  connect?: Prisma.BannedPersonWhereUniqueInput
+}
+
+export type BannedPersonUpdateOneWithoutAlertsNestedInput = {
+  create?: Prisma.XOR<Prisma.BannedPersonCreateWithoutAlertsInput, Prisma.BannedPersonUncheckedCreateWithoutAlertsInput>
+  connectOrCreate?: Prisma.BannedPersonCreateOrConnectWithoutAlertsInput
+  upsert?: Prisma.BannedPersonUpsertWithoutAlertsInput
+  disconnect?: Prisma.BannedPersonWhereInput | boolean
+  delete?: Prisma.BannedPersonWhereInput | boolean
+  connect?: Prisma.BannedPersonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BannedPersonUpdateToOneWithWhereWithoutAlertsInput, Prisma.BannedPersonUpdateWithoutAlertsInput>, Prisma.BannedPersonUncheckedUpdateWithoutAlertsInput>
+}
+
 export type BannedPersonCreateWithoutBansInput = {
   id?: string
   name: string
   imagePath: string
+  alerts?: Prisma.AlertCreateNestedManyWithoutBannedPersonInput
 }
 
 export type BannedPersonUncheckedCreateWithoutBansInput = {
   id?: string
   name: string
   imagePath: string
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBannedPersonInput
 }
 
 export type BannedPersonCreateOrConnectWithoutBansInput = {
@@ -319,12 +349,58 @@ export type BannedPersonUpdateWithoutBansInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
+  alerts?: Prisma.AlertUpdateManyWithoutBannedPersonNestedInput
 }
 
 export type BannedPersonUncheckedUpdateWithoutBansInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBannedPersonNestedInput
+}
+
+export type BannedPersonCreateWithoutAlertsInput = {
+  id?: string
+  name: string
+  imagePath: string
+  bans?: Prisma.BanCreateNestedManyWithoutPersonInput
+}
+
+export type BannedPersonUncheckedCreateWithoutAlertsInput = {
+  id?: string
+  name: string
+  imagePath: string
+  bans?: Prisma.BanUncheckedCreateNestedManyWithoutPersonInput
+}
+
+export type BannedPersonCreateOrConnectWithoutAlertsInput = {
+  where: Prisma.BannedPersonWhereUniqueInput
+  create: Prisma.XOR<Prisma.BannedPersonCreateWithoutAlertsInput, Prisma.BannedPersonUncheckedCreateWithoutAlertsInput>
+}
+
+export type BannedPersonUpsertWithoutAlertsInput = {
+  update: Prisma.XOR<Prisma.BannedPersonUpdateWithoutAlertsInput, Prisma.BannedPersonUncheckedUpdateWithoutAlertsInput>
+  create: Prisma.XOR<Prisma.BannedPersonCreateWithoutAlertsInput, Prisma.BannedPersonUncheckedCreateWithoutAlertsInput>
+  where?: Prisma.BannedPersonWhereInput
+}
+
+export type BannedPersonUpdateToOneWithWhereWithoutAlertsInput = {
+  where?: Prisma.BannedPersonWhereInput
+  data: Prisma.XOR<Prisma.BannedPersonUpdateWithoutAlertsInput, Prisma.BannedPersonUncheckedUpdateWithoutAlertsInput>
+}
+
+export type BannedPersonUpdateWithoutAlertsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  imagePath?: Prisma.StringFieldUpdateOperationsInput | string
+  bans?: Prisma.BanUpdateManyWithoutPersonNestedInput
+}
+
+export type BannedPersonUncheckedUpdateWithoutAlertsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  imagePath?: Prisma.StringFieldUpdateOperationsInput | string
+  bans?: Prisma.BanUncheckedUpdateManyWithoutPersonNestedInput
 }
 
 
@@ -334,10 +410,12 @@ export type BannedPersonUncheckedUpdateWithoutBansInput = {
 
 export type BannedPersonCountOutputType = {
   bans: number
+  alerts: number
 }
 
 export type BannedPersonCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   bans?: boolean | BannedPersonCountOutputTypeCountBansArgs
+  alerts?: boolean | BannedPersonCountOutputTypeCountAlertsArgs
 }
 
 /**
@@ -357,12 +435,20 @@ export type BannedPersonCountOutputTypeCountBansArgs<ExtArgs extends runtime.Typ
   where?: Prisma.BanWhereInput
 }
 
+/**
+ * BannedPersonCountOutputType without action
+ */
+export type BannedPersonCountOutputTypeCountAlertsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AlertWhereInput
+}
+
 
 export type BannedPersonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   imagePath?: boolean
   bans?: boolean | Prisma.BannedPerson$bansArgs<ExtArgs>
+  alerts?: boolean | Prisma.BannedPerson$alertsArgs<ExtArgs>
   _count?: boolean | Prisma.BannedPersonCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["bannedPerson"]>
 
@@ -387,6 +473,7 @@ export type BannedPersonSelectScalar = {
 export type BannedPersonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "imagePath", ExtArgs["result"]["bannedPerson"]>
 export type BannedPersonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   bans?: boolean | Prisma.BannedPerson$bansArgs<ExtArgs>
+  alerts?: boolean | Prisma.BannedPerson$alertsArgs<ExtArgs>
   _count?: boolean | Prisma.BannedPersonCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BannedPersonIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -396,6 +483,7 @@ export type $BannedPersonPayload<ExtArgs extends runtime.Types.Extensions.Intern
   name: "BannedPerson"
   objects: {
     bans: Prisma.$BanPayload<ExtArgs>[]
+    alerts: Prisma.$AlertPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -796,6 +884,7 @@ readonly fields: BannedPersonFieldRefs;
 export interface Prisma__BannedPersonClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   bans<T extends Prisma.BannedPerson$bansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BannedPerson$bansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  alerts<T extends Prisma.BannedPerson$alertsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BannedPerson$alertsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1242,6 +1331,30 @@ export type BannedPerson$bansArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.BanScalarFieldEnum | Prisma.BanScalarFieldEnum[]
+}
+
+/**
+ * BannedPerson.alerts
+ */
+export type BannedPerson$alertsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Alert
+   */
+  select?: Prisma.AlertSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Alert
+   */
+  omit?: Prisma.AlertOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AlertInclude<ExtArgs> | null
+  where?: Prisma.AlertWhereInput
+  orderBy?: Prisma.AlertOrderByWithRelationInput | Prisma.AlertOrderByWithRelationInput[]
+  cursor?: Prisma.AlertWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AlertScalarFieldEnum | Prisma.AlertScalarFieldEnum[]
 }
 
 /**

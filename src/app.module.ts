@@ -6,6 +6,7 @@ import { BannedPeopleModule } from './banned-people/banned-people.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ConfigModule } from '@nestjs/config';
 import { AlertsModule } from './alerts/alerts.module';
+import { BansModule } from './bans/bans.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AlertsModule } from './alerts/alerts.module';
       isGlobal: true,
     }),
     AlertsModule,
+    BansModule,
   ],
   controllers: [],
   providers: [],

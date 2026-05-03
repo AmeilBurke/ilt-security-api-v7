@@ -10,6 +10,7 @@ import { UpdateBannedPersonDto } from "./dto/update-banned-person.dto";
 export class BannedPeopleService {
 	constructor(private prisma: PrismaService) { }
 
+	// need to add venueBan for each venue that is given
 	async create(
 		baseUrl: string,
 		staff: StaffPayload,
@@ -56,11 +57,22 @@ export class BannedPeopleService {
 					reason: createBannedPersonDto.reason,
 					notes: createBannedPersonDto.notes,
 					startDate: createBannedPersonDto.startDate,
-					duration: createBannedPersonDto.duration,
 					isBlanketBan: Boolean(createBannedPersonDto.isBlanketBan),
 					status: requestAccount.role === "ADMIN" ? "APPROVED" : "PENDING"
 				},
 			});
+
+			const venueBans = createBannedPersonDto.venueIds.map((venueId: string) => {
+				return {
+					banId: ban.id,
+					venueId: venueId,
+					endDate: createBannedPersonDto.endDate,
+				}
+			})
+
+			await tx.venueBan.createMany({
+				data: venueBans
+			})
 
 			return { ...bannedPerson, bans: [ban] };
 		});
@@ -146,6 +158,23 @@ export class BannedPeopleService {
 		});
 	}
 
+	async findAllWithActiveBan(baseUrl: string, staff: StaffPayload) {
+		// const findAllWithActiveBan = await this.prisma.bannedPerson.findMany({
+		// 	include: {
+		// 		bans: true,
+		// 	},
+		// });
+
+		// let test = findAllWithActiveBan.map(())
+
+		// return findAllWithActiveBan.map((person) => {
+		// 	return {
+		// 		...person,
+		// 		imagePath: `${baseUrl}/uploads/compressed/people/${person.imagePath}`,
+		// 	};
+		// });
+	}
+
 	async findOneById(baseUrl: string, id: string) {
 		const person = await this.prisma.bannedPerson.findMany({
 			where: {
@@ -165,7 +194,11 @@ export class BannedPeopleService {
 	}
 
 	async findAll(baseUrl: string) {
-		const person = await this.prisma.bannedPerson.findMany();
+		const person = await this.prisma.bannedPerson.findMany({
+			include: {
+				alerts: true
+			}
+		});
 
 		return person.map((details) => {
 			return {

@@ -31,7 +31,6 @@ export type BanMinAggregateOutputType = {
   reason: string | null
   notes: string | null
   startDate: Date | null
-  duration: $Enums.BanDuration | null
   isBlanketBan: boolean | null
   status: $Enums.BanStatus | null
 }
@@ -43,7 +42,6 @@ export type BanMaxAggregateOutputType = {
   reason: string | null
   notes: string | null
   startDate: Date | null
-  duration: $Enums.BanDuration | null
   isBlanketBan: boolean | null
   status: $Enums.BanStatus | null
 }
@@ -55,7 +53,6 @@ export type BanCountAggregateOutputType = {
   reason: number
   notes: number
   startDate: number
-  duration: number
   isBlanketBan: number
   status: number
   _all: number
@@ -69,7 +66,6 @@ export type BanMinAggregateInputType = {
   reason?: true
   notes?: true
   startDate?: true
-  duration?: true
   isBlanketBan?: true
   status?: true
 }
@@ -81,7 +77,6 @@ export type BanMaxAggregateInputType = {
   reason?: true
   notes?: true
   startDate?: true
-  duration?: true
   isBlanketBan?: true
   status?: true
 }
@@ -93,7 +88,6 @@ export type BanCountAggregateInputType = {
   reason?: true
   notes?: true
   startDate?: true
-  duration?: true
   isBlanketBan?: true
   status?: true
   _all?: true
@@ -178,7 +172,6 @@ export type BanGroupByOutputType = {
   reason: string
   notes: string | null
   startDate: Date
-  duration: $Enums.BanDuration
   isBlanketBan: boolean
   status: $Enums.BanStatus
   _count: BanCountAggregateOutputType | null
@@ -211,7 +204,6 @@ export type BanWhereInput = {
   reason?: Prisma.StringFilter<"Ban"> | string
   notes?: Prisma.StringNullableFilter<"Ban"> | string | null
   startDate?: Prisma.DateTimeFilter<"Ban"> | Date | string
-  duration?: Prisma.EnumBanDurationFilter<"Ban"> | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFilter<"Ban"> | boolean
   status?: Prisma.EnumBanStatusFilter<"Ban"> | $Enums.BanStatus
   person?: Prisma.XOR<Prisma.BannedPersonScalarRelationFilter, Prisma.BannedPersonWhereInput>
@@ -226,7 +218,6 @@ export type BanOrderByWithRelationInput = {
   reason?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   startDate?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
   isBlanketBan?: Prisma.SortOrder
   status?: Prisma.SortOrder
   person?: Prisma.BannedPersonOrderByWithRelationInput
@@ -244,7 +235,6 @@ export type BanWhereUniqueInput = Prisma.AtLeast<{
   reason?: Prisma.StringFilter<"Ban"> | string
   notes?: Prisma.StringNullableFilter<"Ban"> | string | null
   startDate?: Prisma.DateTimeFilter<"Ban"> | Date | string
-  duration?: Prisma.EnumBanDurationFilter<"Ban"> | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFilter<"Ban"> | boolean
   status?: Prisma.EnumBanStatusFilter<"Ban"> | $Enums.BanStatus
   person?: Prisma.XOR<Prisma.BannedPersonScalarRelationFilter, Prisma.BannedPersonWhereInput>
@@ -259,7 +249,6 @@ export type BanOrderByWithAggregationInput = {
   reason?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   startDate?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
   isBlanketBan?: Prisma.SortOrder
   status?: Prisma.SortOrder
   _count?: Prisma.BanCountOrderByAggregateInput
@@ -277,7 +266,6 @@ export type BanScalarWhereWithAggregatesInput = {
   reason?: Prisma.StringWithAggregatesFilter<"Ban"> | string
   notes?: Prisma.StringNullableWithAggregatesFilter<"Ban"> | string | null
   startDate?: Prisma.DateTimeWithAggregatesFilter<"Ban"> | Date | string
-  duration?: Prisma.EnumBanDurationWithAggregatesFilter<"Ban"> | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolWithAggregatesFilter<"Ban"> | boolean
   status?: Prisma.EnumBanStatusWithAggregatesFilter<"Ban"> | $Enums.BanStatus
 }
@@ -287,7 +275,6 @@ export type BanCreateInput = {
   reason: string
   notes?: string | null
   startDate?: Date | string
-  duration: $Enums.BanDuration
   isBlanketBan?: boolean
   status?: $Enums.BanStatus
   person: Prisma.BannedPersonCreateNestedOneWithoutBansInput
@@ -302,7 +289,6 @@ export type BanUncheckedCreateInput = {
   reason: string
   notes?: string | null
   startDate?: Date | string
-  duration: $Enums.BanDuration
   isBlanketBan?: boolean
   status?: $Enums.BanStatus
   venueBans?: Prisma.VenueBanUncheckedCreateNestedManyWithoutBanInput
@@ -313,7 +299,6 @@ export type BanUpdateInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  duration?: Prisma.EnumBanDurationFieldUpdateOperationsInput | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumBanStatusFieldUpdateOperationsInput | $Enums.BanStatus
   person?: Prisma.BannedPersonUpdateOneRequiredWithoutBansNestedInput
@@ -328,7 +313,6 @@ export type BanUncheckedUpdateInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  duration?: Prisma.EnumBanDurationFieldUpdateOperationsInput | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumBanStatusFieldUpdateOperationsInput | $Enums.BanStatus
   venueBans?: Prisma.VenueBanUncheckedUpdateManyWithoutBanNestedInput
@@ -341,7 +325,6 @@ export type BanCreateManyInput = {
   reason: string
   notes?: string | null
   startDate?: Date | string
-  duration: $Enums.BanDuration
   isBlanketBan?: boolean
   status?: $Enums.BanStatus
 }
@@ -351,7 +334,6 @@ export type BanUpdateManyMutationInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  duration?: Prisma.EnumBanDurationFieldUpdateOperationsInput | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumBanStatusFieldUpdateOperationsInput | $Enums.BanStatus
 }
@@ -363,7 +345,6 @@ export type BanUncheckedUpdateManyInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  duration?: Prisma.EnumBanDurationFieldUpdateOperationsInput | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumBanStatusFieldUpdateOperationsInput | $Enums.BanStatus
 }
@@ -385,7 +366,6 @@ export type BanCountOrderByAggregateInput = {
   reason?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
   isBlanketBan?: Prisma.SortOrder
   status?: Prisma.SortOrder
 }
@@ -397,7 +377,6 @@ export type BanMaxOrderByAggregateInput = {
   reason?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
   isBlanketBan?: Prisma.SortOrder
   status?: Prisma.SortOrder
 }
@@ -409,7 +388,6 @@ export type BanMinOrderByAggregateInput = {
   reason?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
   isBlanketBan?: Prisma.SortOrder
   status?: Prisma.SortOrder
 }
@@ -511,10 +489,6 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
-export type EnumBanDurationFieldUpdateOperationsInput = {
-  set?: $Enums.BanDuration
-}
-
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
@@ -542,7 +516,6 @@ export type BanCreateWithoutCreatedByInput = {
   reason: string
   notes?: string | null
   startDate?: Date | string
-  duration: $Enums.BanDuration
   isBlanketBan?: boolean
   status?: $Enums.BanStatus
   person: Prisma.BannedPersonCreateNestedOneWithoutBansInput
@@ -555,7 +528,6 @@ export type BanUncheckedCreateWithoutCreatedByInput = {
   reason: string
   notes?: string | null
   startDate?: Date | string
-  duration: $Enums.BanDuration
   isBlanketBan?: boolean
   status?: $Enums.BanStatus
   venueBans?: Prisma.VenueBanUncheckedCreateNestedManyWithoutBanInput
@@ -597,7 +569,6 @@ export type BanScalarWhereInput = {
   reason?: Prisma.StringFilter<"Ban"> | string
   notes?: Prisma.StringNullableFilter<"Ban"> | string | null
   startDate?: Prisma.DateTimeFilter<"Ban"> | Date | string
-  duration?: Prisma.EnumBanDurationFilter<"Ban"> | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFilter<"Ban"> | boolean
   status?: Prisma.EnumBanStatusFilter<"Ban"> | $Enums.BanStatus
 }
@@ -607,7 +578,6 @@ export type BanCreateWithoutPersonInput = {
   reason: string
   notes?: string | null
   startDate?: Date | string
-  duration: $Enums.BanDuration
   isBlanketBan?: boolean
   status?: $Enums.BanStatus
   createdBy: Prisma.StaffCreateNestedOneWithoutBansCreatedInput
@@ -620,7 +590,6 @@ export type BanUncheckedCreateWithoutPersonInput = {
   reason: string
   notes?: string | null
   startDate?: Date | string
-  duration: $Enums.BanDuration
   isBlanketBan?: boolean
   status?: $Enums.BanStatus
   venueBans?: Prisma.VenueBanUncheckedCreateNestedManyWithoutBanInput
@@ -657,7 +626,6 @@ export type BanCreateWithoutVenueBansInput = {
   reason: string
   notes?: string | null
   startDate?: Date | string
-  duration: $Enums.BanDuration
   isBlanketBan?: boolean
   status?: $Enums.BanStatus
   person: Prisma.BannedPersonCreateNestedOneWithoutBansInput
@@ -671,7 +639,6 @@ export type BanUncheckedCreateWithoutVenueBansInput = {
   reason: string
   notes?: string | null
   startDate?: Date | string
-  duration: $Enums.BanDuration
   isBlanketBan?: boolean
   status?: $Enums.BanStatus
 }
@@ -697,7 +664,6 @@ export type BanUpdateWithoutVenueBansInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  duration?: Prisma.EnumBanDurationFieldUpdateOperationsInput | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumBanStatusFieldUpdateOperationsInput | $Enums.BanStatus
   person?: Prisma.BannedPersonUpdateOneRequiredWithoutBansNestedInput
@@ -711,7 +677,6 @@ export type BanUncheckedUpdateWithoutVenueBansInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  duration?: Prisma.EnumBanDurationFieldUpdateOperationsInput | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumBanStatusFieldUpdateOperationsInput | $Enums.BanStatus
 }
@@ -722,7 +687,6 @@ export type BanCreateManyCreatedByInput = {
   reason: string
   notes?: string | null
   startDate?: Date | string
-  duration: $Enums.BanDuration
   isBlanketBan?: boolean
   status?: $Enums.BanStatus
 }
@@ -732,7 +696,6 @@ export type BanUpdateWithoutCreatedByInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  duration?: Prisma.EnumBanDurationFieldUpdateOperationsInput | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumBanStatusFieldUpdateOperationsInput | $Enums.BanStatus
   person?: Prisma.BannedPersonUpdateOneRequiredWithoutBansNestedInput
@@ -745,7 +708,6 @@ export type BanUncheckedUpdateWithoutCreatedByInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  duration?: Prisma.EnumBanDurationFieldUpdateOperationsInput | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumBanStatusFieldUpdateOperationsInput | $Enums.BanStatus
   venueBans?: Prisma.VenueBanUncheckedUpdateManyWithoutBanNestedInput
@@ -757,7 +719,6 @@ export type BanUncheckedUpdateManyWithoutCreatedByInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  duration?: Prisma.EnumBanDurationFieldUpdateOperationsInput | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumBanStatusFieldUpdateOperationsInput | $Enums.BanStatus
 }
@@ -768,7 +729,6 @@ export type BanCreateManyPersonInput = {
   reason: string
   notes?: string | null
   startDate?: Date | string
-  duration: $Enums.BanDuration
   isBlanketBan?: boolean
   status?: $Enums.BanStatus
 }
@@ -778,7 +738,6 @@ export type BanUpdateWithoutPersonInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  duration?: Prisma.EnumBanDurationFieldUpdateOperationsInput | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumBanStatusFieldUpdateOperationsInput | $Enums.BanStatus
   createdBy?: Prisma.StaffUpdateOneRequiredWithoutBansCreatedNestedInput
@@ -791,7 +750,6 @@ export type BanUncheckedUpdateWithoutPersonInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  duration?: Prisma.EnumBanDurationFieldUpdateOperationsInput | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumBanStatusFieldUpdateOperationsInput | $Enums.BanStatus
   venueBans?: Prisma.VenueBanUncheckedUpdateManyWithoutBanNestedInput
@@ -803,7 +761,6 @@ export type BanUncheckedUpdateManyWithoutPersonInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  duration?: Prisma.EnumBanDurationFieldUpdateOperationsInput | $Enums.BanDuration
   isBlanketBan?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumBanStatusFieldUpdateOperationsInput | $Enums.BanStatus
 }
@@ -846,7 +803,6 @@ export type BanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   reason?: boolean
   notes?: boolean
   startDate?: boolean
-  duration?: boolean
   isBlanketBan?: boolean
   status?: boolean
   person?: boolean | Prisma.BannedPersonDefaultArgs<ExtArgs>
@@ -862,7 +818,6 @@ export type BanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   reason?: boolean
   notes?: boolean
   startDate?: boolean
-  duration?: boolean
   isBlanketBan?: boolean
   status?: boolean
   person?: boolean | Prisma.BannedPersonDefaultArgs<ExtArgs>
@@ -876,7 +831,6 @@ export type BanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   reason?: boolean
   notes?: boolean
   startDate?: boolean
-  duration?: boolean
   isBlanketBan?: boolean
   status?: boolean
   person?: boolean | Prisma.BannedPersonDefaultArgs<ExtArgs>
@@ -890,12 +844,11 @@ export type BanSelectScalar = {
   reason?: boolean
   notes?: boolean
   startDate?: boolean
-  duration?: boolean
   isBlanketBan?: boolean
   status?: boolean
 }
 
-export type BanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "personId" | "createdById" | "reason" | "notes" | "startDate" | "duration" | "isBlanketBan" | "status", ExtArgs["result"]["ban"]>
+export type BanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "personId" | "createdById" | "reason" | "notes" | "startDate" | "isBlanketBan" | "status", ExtArgs["result"]["ban"]>
 export type BanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   person?: boolean | Prisma.BannedPersonDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.StaffDefaultArgs<ExtArgs>
@@ -925,7 +878,6 @@ export type $BanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     reason: string
     notes: string | null
     startDate: Date
-    duration: $Enums.BanDuration
     isBlanketBan: boolean
     status: $Enums.BanStatus
   }, ExtArgs["result"]["ban"]>
@@ -1360,7 +1312,6 @@ export interface BanFieldRefs {
   readonly reason: Prisma.FieldRef<"Ban", 'String'>
   readonly notes: Prisma.FieldRef<"Ban", 'String'>
   readonly startDate: Prisma.FieldRef<"Ban", 'DateTime'>
-  readonly duration: Prisma.FieldRef<"Ban", 'BanDuration'>
   readonly isBlanketBan: Prisma.FieldRef<"Ban", 'Boolean'>
   readonly status: Prisma.FieldRef<"Ban", 'BanStatus'>
 }

@@ -133,7 +133,6 @@ export const BanScalarFieldEnum = {
   reason: 'reason',
   notes: 'notes',
   startDate: 'startDate',
-  duration: 'duration',
   isBlanketBan: 'isBlanketBan',
   status: 'status'
 } as const
@@ -157,9 +156,7 @@ export const VenueBanScalarFieldEnum = {
   id: 'id',
   banId: 'banId',
   venueId: 'venueId',
-  startDate: 'startDate',
-  endDate: 'endDate',
-  isActive: 'isActive'
+  endDate: 'endDate'
 } as const
 
 export type VenueBanScalarFieldEnum = (typeof VenueBanScalarFieldEnum)[keyof typeof VenueBanScalarFieldEnum]

@@ -1098,7 +1098,6 @@ export const BanScalarFieldEnum = {
   reason: 'reason',
   notes: 'notes',
   startDate: 'startDate',
-  duration: 'duration',
   isBlanketBan: 'isBlanketBan',
   status: 'status'
 } as const
@@ -1122,9 +1121,7 @@ export const VenueBanScalarFieldEnum = {
   id: 'id',
   banId: 'banId',
   venueId: 'venueId',
-  startDate: 'startDate',
-  endDate: 'endDate',
-  isActive: 'isActive'
+  endDate: 'endDate'
 } as const
 
 export type VenueBanScalarFieldEnum = (typeof VenueBanScalarFieldEnum)[keyof typeof VenueBanScalarFieldEnum]
@@ -1199,20 +1196,6 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-/**
- * Reference to a field of type 'BanDuration'
- */
-export type EnumBanDurationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BanDuration'>
-    
-
-
-/**
- * Reference to a field of type 'BanDuration[]'
- */
-export type ListEnumBanDurationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BanDuration[]'>
     
 
 

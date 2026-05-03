@@ -78,7 +78,7 @@ export class AlertsService {
 					select: {
 						name: true
 					}
-				}
+				},
 			}
 		});
 

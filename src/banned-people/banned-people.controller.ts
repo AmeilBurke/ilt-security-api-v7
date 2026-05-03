@@ -74,6 +74,12 @@ export class BannedPeopleController {
 		return this.bannedPeopleService.findAllPending(baseUrl, staff);
 	}
 
+	@Get("/active-ban")
+	findAllWithActiveBan(@Req() req: express.Request, @Staff() staff: StaffPayload,) {
+		const baseUrl = getBaseUrl(req);
+		return this.bannedPeopleService.findAllWithActiveBan(baseUrl, staff);
+	}
+
 	@Get(":id")
 	findOneById(@Req() req: express.Request, @Param("id") id: string) {
 		const baseUrl = getBaseUrl(req);
