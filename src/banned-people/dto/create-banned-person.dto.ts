@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { IsArray, IsBooleanString, IsDateString, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateBannedPersonDto {
@@ -18,9 +19,10 @@ export class CreateBannedPersonDto {
   endDate!: Date;
 
   @IsBooleanString()
-  isBlanketBan?: string;
+  isBlanketBan!: string;
 
   @IsArray()
   @IsUUID('4', { each: true })
+  @Transform(({ value }) => Array.isArray(value) ? value : [value])
   venueIds!: string[]
 }

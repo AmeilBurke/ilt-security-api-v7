@@ -10,7 +10,7 @@ import { UpdateBannedPersonDto } from "./dto/update-banned-person.dto";
 export class BannedPeopleService {
 	constructor(private prisma: PrismaService) { }
 
-	// need to add venueBan for each venue that is given
+	// need to sort by name 
 	async create(
 		baseUrl: string,
 		staff: StaffPayload,
@@ -46,7 +46,7 @@ export class BannedPeopleService {
 					imagePath: `${file.filename}.webp`,
 				},
 				include: {
-					bans: true,
+					bans: true
 				},
 			});
 
@@ -57,7 +57,7 @@ export class BannedPeopleService {
 					reason: createBannedPersonDto.reason,
 					notes: createBannedPersonDto.notes,
 					startDate: createBannedPersonDto.startDate,
-					isBlanketBan: Boolean(createBannedPersonDto.isBlanketBan),
+					isBlanketBan: createBannedPersonDto.isBlanketBan === "true" ? true : false,
 					status: requestAccount.role === "ADMIN" ? "APPROVED" : "PENDING"
 				},
 			});
@@ -74,7 +74,12 @@ export class BannedPeopleService {
 				data: venueBans
 			})
 
-			return { ...bannedPerson, bans: [ban] };
+			const fullBan = await tx.ban.findUnique({
+				where: { id: ban.id },
+				include: { venueBans: true }
+			});
+
+			return { ...bannedPerson, bans: [fullBan] };
 		});
 
 		return {
@@ -159,20 +164,38 @@ export class BannedPeopleService {
 	}
 
 	async findAllWithActiveBan(baseUrl: string, staff: StaffPayload) {
-		// const findAllWithActiveBan = await this.prisma.bannedPerson.findMany({
-		// 	include: {
-		// 		bans: true,
-		// 	},
-		// });
+		const findAllWithActiveBan = await this.prisma.bannedPerson.findMany({
+			where: {
+				bans: {
+					some: {
+						AND: {
+							venueBans: {
+								some: {
+									endDate: {
+										gt: new Date()
+									}
+								}
+							},
+							isBlanketBan: false
+						}
+					}
+				}
+			},
+			include: {
+				bans: {
+					include: {
+						venueBans: true
+					}
+				}
+			}
+		});
 
-		// let test = findAllWithActiveBan.map(())
-
-		// return findAllWithActiveBan.map((person) => {
-		// 	return {
-		// 		...person,
-		// 		imagePath: `${baseUrl}/uploads/compressed/people/${person.imagePath}`,
-		// 	};
-		// });
+		return findAllWithActiveBan.map((person) => {
+			return {
+				...person,
+				imagePath: `${baseUrl}/uploads/compressed/people/${person.imagePath}`,
+			};
+		});
 	}
 
 	async findOneById(baseUrl: string, id: string) {
