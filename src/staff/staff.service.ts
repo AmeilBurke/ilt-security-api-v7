@@ -8,15 +8,16 @@ import express from "express";
 import { Role } from "src/generated/prisma/enums";
 import { PrismaService } from "src/prisma/prisma.service";
 import { hashPassword } from "src/utils";
-import  { StaffFrontEnd, StaffPayload } from "src/utils/types";
-import  { CreateStaffDto } from "./dto/create-staff.dto";
-import  { UpdateStaffDto } from "./dto/update-staff.dto";
+import { StaffFrontEnd, StaffPayload } from "src/utils/types";
+import { CreateStaffDto } from "./dto/create-staff.dto";
+import { UpdateStaffDto } from "./dto/update-staff.dto";
+import { Prisma, Staff } from "@/generated/prisma/client";
 
 @Injectable()
 export class StaffService {
 	constructor(private prisma: PrismaService) { }
 
-	async create(createStaffDto: CreateStaffDto, staff?: StaffPayload) {
+	async create(createStaffDto: CreateStaffDto, staff?: StaffPayload): Promise<string> {
 		const staffCount = await this.prisma.staff.count();
 
 		if (staffCount > 0) {
@@ -115,7 +116,7 @@ export class StaffService {
 		});
 	}
 
-	async findOneByEmail(email: string) {
+	async findOneByEmail(email: string): Promise<Staff> {
 		return await this.prisma.staff.findUniqueOrThrow({
 			where: {
 				email: email.toLowerCase(),
@@ -226,7 +227,7 @@ export class StaffService {
 		return updatedStaff;
 	}
 
-	async deleteById(id: string, staff: StaffPayload) {
+	async deleteById(id: string, staff: StaffPayload): Promise<string> {
 		const staffCount = await this.prisma.staff.count();
 
 		if (staffCount > 0) {

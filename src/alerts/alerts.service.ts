@@ -96,8 +96,6 @@ export class AlertsService {
 			}
 		});
 
-		// console.log(allAlerts)
-
 		return allAlerts
 	}
 

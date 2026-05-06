@@ -10,7 +10,7 @@ export class AuthenticationService {
     private jwtService: JwtService,
   ) { }
 
-  async signIn(email: string, pass: string): Promise<any> {
+  async signIn(email: string, pass: string): Promise<{ access_token: string }> {
     const staff = await this.staffService.findOneByEmail(email);
 
     const isPasswordCorrect = await checkPassword(pass, staff.password);

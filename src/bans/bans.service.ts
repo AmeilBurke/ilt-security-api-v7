@@ -3,6 +3,8 @@ import { CreateBanDto } from './dto/create-ban.dto';
 import { UpdateBanDto } from './dto/update-ban.dto';
 import { StaffPayload } from '@/utils/types';
 import { PrismaService } from "src/prisma/prisma.service";
+import { Prisma, Role } from '@/generated/prisma/client';
+
 @Injectable()
 export class BansService {
 
@@ -11,7 +13,7 @@ export class BansService {
   async create(
     staff: StaffPayload,
     createBanDto: CreateBanDto,
-  ) {
+  ): Promise<Prisma.BanGetPayload<{ include: { venueBans: true } }>> {
     const requestAccount = await this.prisma.staff.findUniqueOrThrow({
       where: {
         id: staff.id,
@@ -46,7 +48,7 @@ export class BansService {
         data: venueBans
       })
 
-      const fullBan = await tx.ban.findUnique({
+      const fullBan = await tx.ban.findUniqueOrThrow({
         where: { id: ban.id },
         include: { venueBans: true }
       });
@@ -61,12 +63,16 @@ export class BansService {
     staff: StaffPayload,
     id: string,
     updateBanDto: UpdateBanDto
-  ) {
+  ): Promise<Prisma.BanGetPayload<{ include: { venueBans: true } }>> {
     const requestAccount = await this.prisma.staff.findUniqueOrThrow({
       where: {
         id: staff.id,
       },
     });
+
+    if (requestAccount.role !== Role.ADMIN) {
+      throw new UnauthorizedException();
+    }
 
     const updatedBan = await this.prisma.$transaction(async (tx) => {
       const ban = await tx.ban.update({
@@ -104,7 +110,7 @@ export class BansService {
         });
       }
 
-      const fullBan = await tx.ban.findUnique({
+      const fullBan = await tx.ban.findUniqueOrThrow({
         where: { id: ban.id },
         include: { venueBans: true }
       });
@@ -117,7 +123,7 @@ export class BansService {
   async remove(
     staff: StaffPayload,
     id: string
-  ) {
+  ): Promise<Prisma.BanGetPayload<{ include: { venueBans: true } }>> {
     const requestAccount = await this.prisma.staff.findUniqueOrThrow({
       where: { id: staff.id },
     });

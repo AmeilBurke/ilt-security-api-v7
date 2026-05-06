@@ -7,10 +7,10 @@ import {
 import * as fs from "fs";
 import sharp from "sharp";
 import { PrismaService } from "src/prisma/prisma.service";
-import  { StaffPayload } from "src/utils/types";
-import { Prisma } from "../generated/prisma/client";
-import  { CreateVenueDto } from "./dto/create-venue.dto";
-import  { UpdateVenueDto } from "./dto/update-venue.dto";
+import { StaffPayload } from "src/utils/types";
+import { Prisma, Venue } from "../generated/prisma/client";
+import { CreateVenueDto } from "./dto/create-venue.dto";
+import { UpdateVenueDto } from "./dto/update-venue.dto";
 
 @Injectable()
 export class VenuesService {
@@ -21,7 +21,7 @@ export class VenuesService {
     staff: StaffPayload,
     file: Express.Multer.File,
     createVenueDto: CreateVenueDto,
-  ) {
+  ): Promise<Venue> {
     if (!file) {
       throw new BadRequestException("No image was given");
     }
@@ -80,7 +80,7 @@ export class VenuesService {
     };
   }
 
-  async findAll(baseUrl: string) {
+  async findAll(baseUrl: string): Promise<Venue[]> {
     const allVenues = await this.prisma.venue.findMany({
       include: { venueManagers: true, dutyManagers: true },
     });
@@ -92,11 +92,11 @@ export class VenuesService {
     });
   }
 
-  async findVenueCount() {
+  async findVenueCount(): Promise<number> {
     return await this.prisma.venue.count();
   }
 
-  async findOneById(baseUrl: string, id: string) {
+  async findOneById(baseUrl: string, id: string): Promise<Venue> {
     const venue = await this.prisma.venue.findUniqueOrThrow({
       where: {
         id: id,
@@ -115,7 +115,7 @@ export class VenuesService {
     id: string,
     file: Express.Multer.File,
     updateVenueDto: UpdateVenueDto,
-  ) {
+  ): Promise<Venue> {
     const venueCount = await this.prisma.venue.count();
 
     if (venueCount > 0) {
@@ -178,12 +178,12 @@ export class VenuesService {
       return venue;
     });
     return {
-      ...updateVenueDto,
+      ...updatedVenue,
       imagePath: `${baseUrl}/uploads/compressed/venues/${updatedVenue.imagePath}`,
     };
   }
 
-  async deleteOneById(id: string) {
+  async deleteOneById(id: string): Promise<string> {
     await this.prisma.$transaction(async (tx) => {
       await tx.venue.delete({
         where: {
@@ -217,7 +217,7 @@ export class VenuesService {
     venueId: string,
     venueDto: CreateVenueDto | UpdateVenueDto,
     tx: Prisma.TransactionClient,
-  ) {
+  ): Promise<void> {
     if (venueDto.venueManagers) {
       const venueManagerIds = await tx.staff.findMany({
         where: {

@@ -5,18 +5,21 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { StaffPayload } from "src/utils/types";
 import { CreateBannedPersonDto } from "./dto/create-banned-person.dto";
 import { UpdateBannedPersonDto } from "./dto/update-banned-person.dto";
+import { Prisma } from "@/generated/prisma/client";
+import { BannedPerson } from "@prisma/client";
 
 @Injectable()
 export class BannedPeopleService {
 	constructor(private prisma: PrismaService) { }
 
-	// need to sort by name 
 	async create(
 		baseUrl: string,
 		staff: StaffPayload,
 		file: Express.Multer.File,
 		createBannedPersonDto: CreateBannedPersonDto,
-	) {
+	): Promise<Prisma.BannedPersonGetPayload<{ include: { bans: { include: { venueBans: true } } } }>> {
+
+		// if venue manager sends ban through auto approve for venues they are a part of
 
 		if (!file) {
 			throw new BadRequestException("No image was given")
@@ -45,9 +48,6 @@ export class BannedPeopleService {
 					name: createBannedPersonDto.name,
 					imagePath: `${file.filename}.webp`,
 				},
-				include: {
-					bans: true
-				},
 			});
 
 			const ban = await tx.ban.create({
@@ -74,7 +74,7 @@ export class BannedPeopleService {
 				data: venueBans
 			})
 
-			const fullBan = await tx.ban.findUnique({
+			const fullBan = await tx.ban.findUniqueOrThrow({
 				where: { id: ban.id },
 				include: { venueBans: true }
 			});
@@ -88,15 +88,15 @@ export class BannedPeopleService {
 		};
 	}
 
-	async findAllBlanketBanned(baseUrl: string) {
+	async findAllBlanketBanned(baseUrl: string): Promise<Prisma.BannedPersonGetPayload<{ include: { bans: true } }>[]> {
 		const blanketBanned = await this.prisma.bannedPerson.findMany({
 			where: {
 				bans: {
 					some: {
 						isBlanketBan: true,
-						// NOT: {
-						// 	status: "PENDING"
-						// }
+						NOT: {
+							status: "PENDING"
+						}
 					},
 				},
 			},
@@ -113,7 +113,7 @@ export class BannedPeopleService {
 		});
 	}
 
-	async findAllByVenueId(baseUrl: string, venueId: string) {
+	async findAllByVenueId(baseUrl: string, venueId: string): Promise<Prisma.BannedPersonGetPayload<{ include: { bans: true } }>[]> {
 		const bannedFromVenue = await this.prisma.bannedPerson.findMany({
 			where: {
 				bans: {
@@ -139,7 +139,7 @@ export class BannedPeopleService {
 		});
 	}
 
-	async findAllPending(baseUrl: string, staff: StaffPayload) {
+	async findAllPending(baseUrl: string, staff: StaffPayload): Promise<Prisma.BannedPersonGetPayload<{ include: { bans: true } }>[]> {
 		const findAllWithPendingBan = await this.prisma.bannedPerson.findMany({
 			where: {
 				bans: {
@@ -163,7 +163,7 @@ export class BannedPeopleService {
 		});
 	}
 
-	async findAllWithActiveBan(baseUrl: string, staff: StaffPayload) {
+	async findAllWithActiveBan(baseUrl: string, staff: StaffPayload): Promise<Prisma.BannedPersonGetPayload<{ include: { bans: true } }>[]> {
 		const findAllWithActiveBan = await this.prisma.bannedPerson.findMany({
 			where: {
 				bans: {
@@ -198,8 +198,8 @@ export class BannedPeopleService {
 		});
 	}
 
-	async findOneById(baseUrl: string, id: string) {
-		const person = await this.prisma.bannedPerson.findMany({
+	async findOneById(baseUrl: string, id: string): Promise<Prisma.BannedPersonGetPayload<{ include: { bans: true } }>> {
+		const person = await this.prisma.bannedPerson.findUniqueOrThrow({
 			where: {
 				id: id,
 			},
@@ -207,16 +207,13 @@ export class BannedPeopleService {
 				bans: true,
 			},
 		});
-
-		return person.map((details) => {
-			return {
-				...details,
-				imagePath: `${baseUrl}/uploads/compressed/people/${details.imagePath}`,
-			};
-		});
+		return {
+			...person,
+			imagePath: `${baseUrl}/uploads/compressed/people/${person.imagePath}`,
+		};
 	}
 
-	async findAll(baseUrl: string) {
+	async findAll(baseUrl: string): Promise<Prisma.BannedPersonGetPayload<{ include: { alerts: true } }>[]> {
 		const person = await this.prisma.bannedPerson.findMany({
 			include: {
 				alerts: true
@@ -236,7 +233,7 @@ export class BannedPeopleService {
 		id: string,
 		updateBannedPersonDto: UpdateBannedPersonDto,
 		file: Express.Multer.File | undefined,
-	) {
+	): Promise<BannedPerson> {
 		if (file) {
 			const outdatedDetails = await this.prisma.bannedPerson.findUnique({
 				where: {

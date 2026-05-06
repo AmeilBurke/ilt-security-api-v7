@@ -15,7 +15,13 @@ export class AuthenticationController {
   }
 
   @Get('profile')
-  getProfile(@Req() req: any) {
+  getProfile(@Req() req: any): Promise<{
+    id: string,
+    email: string,
+    name: string,
+    role: string,
+    iat: number
+  }> {
     return req.staff;
   }
 }
