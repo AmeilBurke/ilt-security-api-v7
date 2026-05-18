@@ -5,7 +5,7 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { StaffPayload } from "src/utils/types";
 import { CreateBannedPersonDto } from "./dto/create-banned-person.dto";
 import { UpdateBannedPersonDto } from "./dto/update-banned-person.dto";
-import { Prisma } from "@/generated/prisma/client";
+import { Prisma, Role } from "@/generated/prisma/client";
 import { BannedPerson } from "@prisma/client";
 
 @Injectable()
@@ -50,6 +50,8 @@ export class BannedPeopleService {
 				},
 			});
 
+			console.log(requestAccount)
+
 			const ban = await tx.ban.create({
 				data: {
 					personId: bannedPerson.id,
@@ -58,7 +60,7 @@ export class BannedPeopleService {
 					notes: createBannedPersonDto.notes,
 					startDate: createBannedPersonDto.startDate,
 					isBlanketBan: createBannedPersonDto.isBlanketBan === "true" ? true : false,
-					status: requestAccount.role === "ADMIN" ? "APPROVED" : "PENDING"
+					status: requestAccount.role === Role.ADMIN ? "APPROVED" : "PENDING"
 				},
 			});
 
@@ -132,30 +134,6 @@ export class BannedPeopleService {
 		});
 
 		return bannedFromVenue.map((person) => {
-			return {
-				...person,
-				imagePath: `${baseUrl}/uploads/compressed/people/${person.imagePath}`,
-			};
-		});
-	}
-
-	async findAllPending(baseUrl: string, staff: StaffPayload): Promise<Prisma.BannedPersonGetPayload<{ include: { bans: true } }>[]> {
-		const findAllWithPendingBan = await this.prisma.bannedPerson.findMany({
-			where: {
-				bans: {
-					some: {
-						status: {
-							equals: "PENDING"
-						},
-					},
-				},
-			},
-			include: {
-				bans: true,
-			},
-		});
-
-		return findAllWithPendingBan.map((person) => {
 			return {
 				...person,
 				imagePath: `${baseUrl}/uploads/compressed/people/${person.imagePath}`,

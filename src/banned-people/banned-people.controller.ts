@@ -68,11 +68,11 @@ export class BannedPeopleController {
 		return this.bannedPeopleService.findAllByVenueId(baseUrl, id);
 	}
 
-	@Get("/pending")
-	findAllPending(@Req() req: express.Request, @Staff() staff: StaffPayload,) {
-		const baseUrl = getBaseUrl(req);
-		return this.bannedPeopleService.findAllPending(baseUrl, staff);
-	}
+	// @Get("/pending")
+	// findAllPending(@Req() req: express.Request, @Staff() staff: StaffPayload,) {
+	// 	const baseUrl = getBaseUrl(req);
+	// 	return this.bannedPeopleService.findAllPending(baseUrl, staff);
+	// }
 
 	@Get("/active-ban")
 	findAllWithActiveBan(@Req() req: express.Request, @Staff() staff: StaffPayload,) {

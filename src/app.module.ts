@@ -7,6 +7,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { ConfigModule } from '@nestjs/config';
 import { AlertsModule } from './alerts/alerts.module';
 import { BansModule } from './bans/bans.module';
+import { VenueBansModule } from './venue-bans/venue-bans.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { BansModule } from './bans/bans.module';
     }),
     AlertsModule,
     BansModule,
+    VenueBansModule,
   ],
   controllers: [],
   providers: [],

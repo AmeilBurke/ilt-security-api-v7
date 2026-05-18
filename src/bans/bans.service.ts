@@ -59,6 +59,46 @@ export class BansService {
     return newBan
   }
 
+  async findAllPending(baseUrl: string, staff: StaffPayload): Promise<Prisma.BanGetPayload<{
+    include: {
+      createdBy: {
+        select: {
+          name: true
+        }
+      },
+      person: true,
+      venueBans: true
+    }
+  }>[]> {
+
+    const allPendingBans = await this.prisma.ban.findMany({
+      where: {
+        status: {
+          equals: "PENDING"
+        }
+      },
+      include: {
+        createdBy: {
+          select: {
+            name: true
+          }
+        },
+        person: true,
+        venueBans: true
+      }
+    })
+
+    return allPendingBans.map((ban) => {
+      return {
+        ...ban,
+        person: {
+          ...ban.person,
+          imagePath: `${baseUrl}/uploads/compressed/people/${ban.person.imagePath}`,
+        }
+      };
+    });
+  }
+
   async update(
     staff: StaffPayload,
     id: string,
@@ -75,6 +115,7 @@ export class BansService {
     }
 
     const updatedBan = await this.prisma.$transaction(async (tx) => {
+      console.log(updateBanDto)
       const ban = await tx.ban.update({
         where: {
           id: id

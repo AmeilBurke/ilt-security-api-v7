@@ -93,7 +93,7 @@ export class StaffService {
 		});
 	}
 
-	async isSetupDone() {
+	async isSetupDone(): Promise<{ isInitialAdminCreated: boolean, isInitialVenueCreated: boolean }> {
 		const staffCount = await this.prisma.staff.count();
 		const venueCount = await this.prisma.venue.count();
 

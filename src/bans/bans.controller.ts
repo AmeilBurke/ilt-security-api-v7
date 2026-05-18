@@ -20,12 +20,19 @@ export class BansController {
     return this.bansService.create(staff, createBanDto);
   }
 
+  @Get("/pending")
+  findAllPending(@Req() req: express.Request, @Staff() staff: StaffPayload,) {
+    const baseUrl = getBaseUrl(req);
+    return this.bansService.findAllPending(baseUrl, staff);
+  }
+
   @Patch(':id')
   update(
     @Staff() staff: StaffPayload,
     @Param('id') id: string,
     @Body() updateBanDto: UpdateBanDto
   ) {
+    console.log(updateBanDto)
     return this.bansService.update(staff, id, updateBanDto);
   }
 
