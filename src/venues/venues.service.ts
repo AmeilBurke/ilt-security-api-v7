@@ -101,6 +101,13 @@ export class VenuesService {
       where: {
         id: id,
       },
+      include: {
+        venueManagers: {
+          include: {
+            staff: true
+          }
+        }
+      }
     });
 
     return {

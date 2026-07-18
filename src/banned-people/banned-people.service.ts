@@ -6,7 +6,7 @@ import { StaffPayload } from "src/utils/types";
 import { CreateBannedPersonDto } from "./dto/create-banned-person.dto";
 import { UpdateBannedPersonDto } from "./dto/update-banned-person.dto";
 import { Prisma, Role } from "@/generated/prisma/client";
-import { BannedPerson } from "@prisma/client";
+import { BannedPerson } from "@/generated/prisma/client";
 
 @Injectable()
 export class BannedPeopleService {
@@ -50,8 +50,6 @@ export class BannedPeopleService {
 				},
 			});
 
-			console.log(requestAccount)
-
 			const ban = await tx.ban.create({
 				data: {
 					personId: bannedPerson.id,
@@ -59,6 +57,7 @@ export class BannedPeopleService {
 					reason: createBannedPersonDto.reason,
 					notes: createBannedPersonDto.notes,
 					startDate: createBannedPersonDto.startDate,
+					endDate: createBannedPersonDto.endDate,
 					isBlanketBan: createBannedPersonDto.isBlanketBan === "true" ? true : false,
 					status: requestAccount.role === Role.ADMIN ? "APPROVED" : "PENDING"
 				},
@@ -67,8 +66,7 @@ export class BannedPeopleService {
 			const venueBans = createBannedPersonDto.venueIds.map((venueId: string) => {
 				return {
 					banId: ban.id,
-					venueId: venueId,
-					endDate: createBannedPersonDto.endDate,
+					venueId: venueId
 				}
 			})
 
@@ -90,7 +88,19 @@ export class BannedPeopleService {
 		};
 	}
 
-	async findAllBlanketBanned(baseUrl: string): Promise<Prisma.BannedPersonGetPayload<{ include: { bans: true } }>[]> {
+	async findAllBlanketBanned(baseUrl: string): Promise<Prisma.BannedPersonGetPayload<{
+		include: {
+			bans: {
+				include: {
+					venueBans: {
+						include: {
+							venue: true
+						}
+					}
+				}
+			}
+		}
+	}>[]> {
 		const blanketBanned = await this.prisma.bannedPerson.findMany({
 			where: {
 				bans: {
@@ -103,8 +113,22 @@ export class BannedPeopleService {
 				},
 			},
 			include: {
-				bans: true,
+				bans: {
+					include: {
+						venueBans: {
+							include: {
+								venue: true
+							}
+						}
+					},
+					orderBy: {
+						startDate: "desc"
+					}
+				}
 			},
+			orderBy: {
+
+			}
 		});
 
 		return blanketBanned.map((person) => {
@@ -115,7 +139,7 @@ export class BannedPeopleService {
 		});
 	}
 
-	async findAllByVenueId(baseUrl: string, venueId: string): Promise<Prisma.BannedPersonGetPayload<{ include: { bans: true } }>[]> {
+	async findAllByVenueId(baseUrl: string, venueId: string): Promise<BannedPerson[]> {
 		const bannedFromVenue = await this.prisma.bannedPerson.findMany({
 			where: {
 				bans: {
@@ -129,8 +153,19 @@ export class BannedPeopleService {
 				},
 			},
 			include: {
-				bans: true,
+				bans: {
+					include: {
+						venueBans: {
+							include: {
+								venue: true
+							}
+						}
+					}
+				}
 			},
+			orderBy: {
+				name: "asc",
+			}
 		});
 
 		return bannedFromVenue.map((person) => {
@@ -147,12 +182,8 @@ export class BannedPeopleService {
 				bans: {
 					some: {
 						AND: {
-							venueBans: {
-								some: {
-									endDate: {
-										gt: new Date()
-									}
-								}
+							endDate: {
+								gt: new Date()
 							},
 							isBlanketBan: false
 						}

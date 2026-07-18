@@ -30,8 +30,7 @@ export class VenueBansService {
       const venueBans = createVenueBanDto.venueDetails.map((venueDetails) => {
         return {
           banId: createVenueBanDto.banId,
-          venueId: venueDetails.venueId,
-          endDate: venueDetails.endDate
+          venueId: venueDetails.venueId
         }
       })
 

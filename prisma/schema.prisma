@@ -76,11 +76,11 @@ model DutyManager {
 // ============================================
 
 model BannedPerson {
-  id        String  @id @default(uuid())
+  id        String @id @default(uuid())
   name      String
   imagePath String
   bans      Ban[]
-  alerts    Alert[]
+  alerts    Alert?
 }
 
 // ============================================
@@ -88,13 +88,13 @@ model BannedPerson {
 // ============================================
 
 model Ban {
-  id          String      @id @default(uuid())
-  personId    String
-  createdById String
-  reason      String
-  notes       String?
-  startDate   DateTime    @default(now()) // When the incident occurred
-
+  id           String    @id @default(uuid())
+  personId     String
+  createdById  String
+  reason       String
+  notes        String?
+  startDate    DateTime  @default(now()) // When the incident occurred
+  endDate      DateTime
   // Ban type and scope
   isBlanketBan Boolean   @default(false) // True = applies to all venues, False = specific venues
   status       BanStatus @default(PENDING)
@@ -107,7 +107,7 @@ model Ban {
 
 model Alert {
   id           String        @id @default(uuid())
-  personId     String?
+  personId     String?       @unique
   reason       String
   imagePath    String
   startDate    DateTime      @default(now())
@@ -129,13 +129,12 @@ enum BanStatus {
 
 // This table allows each venue to have its own end date for a ban
 model VenueBan {
-  id        String   @id @default(uuid())
-  banId     String
-  venueId   String
-  endDate   DateTime // Can be modified independently per venue
-
-  ban   Ban   @relation(fields: [banId], references: [id], onDelete: Cascade)
-  venue Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  id      String @id @default(uuid())
+  banId   String
+  venueId String
+  // endDate   DateTime // Can be modified independently per venue
+  ban     Ban    @relation(fields: [banId], references: [id], onDelete: Cascade)
+  venue   Venue  @relation(fields: [venueId], references: [id], onDelete: Cascade)
 
   @@unique([banId, venueId])
 }

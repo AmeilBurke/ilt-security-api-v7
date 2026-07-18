@@ -28,6 +28,7 @@ export class BansService {
           reason: createBanDto.reason,
           notes: createBanDto.notes,
           startDate: createBanDto.startDate,
+          endDate: createBanDto.endDate,
           isBlanketBan: createBanDto.isBlanketBan,
           status: requestAccount.role === "ADMIN" ? "APPROVED" : "PENDING"
         },
@@ -40,7 +41,7 @@ export class BansService {
         return {
           banId: ban.id,
           venueId: venueId,
-          endDate: createBanDto.endDate
+          // endDate: createBanDto.endDate
         }
       }))
 
@@ -125,16 +126,24 @@ export class BansService {
           reason: updateBanDto.reason,
           notes: updateBanDto.notes,
           startDate: updateBanDto.startDate,
+          endDate: updateBanDto.endDate,
           isBlanketBan: updateBanDto.isBlanketBan,
           status: updateBanDto.status
         },
         select: {
           id: true,
+          endDate: true
         }
       })
 
       if (updateBanDto.venueIds && updateBanDto.endDate) {
-        const endDate = updateBanDto.endDate;
+        let endDate: string | Date;
+
+        if (updateBanDto.endDate) {
+          endDate = updateBanDto.endDate
+        } else {
+          endDate = ban.endDate
+        }
 
         await tx.venueBan.deleteMany({
           where: { banId: ban.id }
@@ -143,7 +152,6 @@ export class BansService {
         const venueBans = updateBanDto.venueIds.map((venueId) => ({
           banId: ban.id,
           venueId,
-          endDate,
         }));
 
         await tx.venueBan.createMany({

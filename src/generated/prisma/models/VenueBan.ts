@@ -28,21 +28,18 @@ export type VenueBanMinAggregateOutputType = {
   id: string | null
   banId: string | null
   venueId: string | null
-  endDate: Date | null
 }
 
 export type VenueBanMaxAggregateOutputType = {
   id: string | null
   banId: string | null
   venueId: string | null
-  endDate: Date | null
 }
 
 export type VenueBanCountAggregateOutputType = {
   id: number
   banId: number
   venueId: number
-  endDate: number
   _all: number
 }
 
@@ -51,21 +48,18 @@ export type VenueBanMinAggregateInputType = {
   id?: true
   banId?: true
   venueId?: true
-  endDate?: true
 }
 
 export type VenueBanMaxAggregateInputType = {
   id?: true
   banId?: true
   venueId?: true
-  endDate?: true
 }
 
 export type VenueBanCountAggregateInputType = {
   id?: true
   banId?: true
   venueId?: true
-  endDate?: true
   _all?: true
 }
 
@@ -145,7 +139,6 @@ export type VenueBanGroupByOutputType = {
   id: string
   banId: string
   venueId: string
-  endDate: Date
   _count: VenueBanCountAggregateOutputType | null
   _min: VenueBanMinAggregateOutputType | null
   _max: VenueBanMaxAggregateOutputType | null
@@ -173,7 +166,6 @@ export type VenueBanWhereInput = {
   id?: Prisma.StringFilter<"VenueBan"> | string
   banId?: Prisma.StringFilter<"VenueBan"> | string
   venueId?: Prisma.StringFilter<"VenueBan"> | string
-  endDate?: Prisma.DateTimeFilter<"VenueBan"> | Date | string
   ban?: Prisma.XOR<Prisma.BanScalarRelationFilter, Prisma.BanWhereInput>
   venue?: Prisma.XOR<Prisma.VenueScalarRelationFilter, Prisma.VenueWhereInput>
 }
@@ -182,7 +174,6 @@ export type VenueBanOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   banId?: Prisma.SortOrder
   venueId?: Prisma.SortOrder
-  endDate?: Prisma.SortOrder
   ban?: Prisma.BanOrderByWithRelationInput
   venue?: Prisma.VenueOrderByWithRelationInput
 }
@@ -195,7 +186,6 @@ export type VenueBanWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.VenueBanWhereInput | Prisma.VenueBanWhereInput[]
   banId?: Prisma.StringFilter<"VenueBan"> | string
   venueId?: Prisma.StringFilter<"VenueBan"> | string
-  endDate?: Prisma.DateTimeFilter<"VenueBan"> | Date | string
   ban?: Prisma.XOR<Prisma.BanScalarRelationFilter, Prisma.BanWhereInput>
   venue?: Prisma.XOR<Prisma.VenueScalarRelationFilter, Prisma.VenueWhereInput>
 }, "id" | "banId_venueId">
@@ -204,7 +194,6 @@ export type VenueBanOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   banId?: Prisma.SortOrder
   venueId?: Prisma.SortOrder
-  endDate?: Prisma.SortOrder
   _count?: Prisma.VenueBanCountOrderByAggregateInput
   _max?: Prisma.VenueBanMaxOrderByAggregateInput
   _min?: Prisma.VenueBanMinOrderByAggregateInput
@@ -217,12 +206,10 @@ export type VenueBanScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"VenueBan"> | string
   banId?: Prisma.StringWithAggregatesFilter<"VenueBan"> | string
   venueId?: Prisma.StringWithAggregatesFilter<"VenueBan"> | string
-  endDate?: Prisma.DateTimeWithAggregatesFilter<"VenueBan"> | Date | string
 }
 
 export type VenueBanCreateInput = {
   id?: string
-  endDate: Date | string
   ban: Prisma.BanCreateNestedOneWithoutVenueBansInput
   venue: Prisma.VenueCreateNestedOneWithoutVenueBansInput
 }
@@ -231,12 +218,10 @@ export type VenueBanUncheckedCreateInput = {
   id?: string
   banId: string
   venueId: string
-  endDate: Date | string
 }
 
 export type VenueBanUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ban?: Prisma.BanUpdateOneRequiredWithoutVenueBansNestedInput
   venue?: Prisma.VenueUpdateOneRequiredWithoutVenueBansNestedInput
 }
@@ -245,26 +230,22 @@ export type VenueBanUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   banId?: Prisma.StringFieldUpdateOperationsInput | string
   venueId?: Prisma.StringFieldUpdateOperationsInput | string
-  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type VenueBanCreateManyInput = {
   id?: string
   banId: string
   venueId: string
-  endDate: Date | string
 }
 
 export type VenueBanUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type VenueBanUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   banId?: Prisma.StringFieldUpdateOperationsInput | string
   venueId?: Prisma.StringFieldUpdateOperationsInput | string
-  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type VenueBanListRelationFilter = {
@@ -286,21 +267,18 @@ export type VenueBanCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   banId?: Prisma.SortOrder
   venueId?: Prisma.SortOrder
-  endDate?: Prisma.SortOrder
 }
 
 export type VenueBanMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   banId?: Prisma.SortOrder
   venueId?: Prisma.SortOrder
-  endDate?: Prisma.SortOrder
 }
 
 export type VenueBanMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   banId?: Prisma.SortOrder
   venueId?: Prisma.SortOrder
-  endDate?: Prisma.SortOrder
 }
 
 export type VenueBanCreateNestedManyWithoutVenueInput = {
@@ -389,14 +367,12 @@ export type VenueBanUncheckedUpdateManyWithoutBanNestedInput = {
 
 export type VenueBanCreateWithoutVenueInput = {
   id?: string
-  endDate: Date | string
   ban: Prisma.BanCreateNestedOneWithoutVenueBansInput
 }
 
 export type VenueBanUncheckedCreateWithoutVenueInput = {
   id?: string
   banId: string
-  endDate: Date | string
 }
 
 export type VenueBanCreateOrConnectWithoutVenueInput = {
@@ -432,19 +408,16 @@ export type VenueBanScalarWhereInput = {
   id?: Prisma.StringFilter<"VenueBan"> | string
   banId?: Prisma.StringFilter<"VenueBan"> | string
   venueId?: Prisma.StringFilter<"VenueBan"> | string
-  endDate?: Prisma.DateTimeFilter<"VenueBan"> | Date | string
 }
 
 export type VenueBanCreateWithoutBanInput = {
   id?: string
-  endDate: Date | string
   venue: Prisma.VenueCreateNestedOneWithoutVenueBansInput
 }
 
 export type VenueBanUncheckedCreateWithoutBanInput = {
   id?: string
   venueId: string
-  endDate: Date | string
 }
 
 export type VenueBanCreateOrConnectWithoutBanInput = {
@@ -476,49 +449,41 @@ export type VenueBanUpdateManyWithWhereWithoutBanInput = {
 export type VenueBanCreateManyVenueInput = {
   id?: string
   banId: string
-  endDate: Date | string
 }
 
 export type VenueBanUpdateWithoutVenueInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ban?: Prisma.BanUpdateOneRequiredWithoutVenueBansNestedInput
 }
 
 export type VenueBanUncheckedUpdateWithoutVenueInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   banId?: Prisma.StringFieldUpdateOperationsInput | string
-  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type VenueBanUncheckedUpdateManyWithoutVenueInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   banId?: Prisma.StringFieldUpdateOperationsInput | string
-  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type VenueBanCreateManyBanInput = {
   id?: string
   venueId: string
-  endDate: Date | string
 }
 
 export type VenueBanUpdateWithoutBanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   venue?: Prisma.VenueUpdateOneRequiredWithoutVenueBansNestedInput
 }
 
 export type VenueBanUncheckedUpdateWithoutBanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   venueId?: Prisma.StringFieldUpdateOperationsInput | string
-  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type VenueBanUncheckedUpdateManyWithoutBanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   venueId?: Prisma.StringFieldUpdateOperationsInput | string
-  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -527,7 +492,6 @@ export type VenueBanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   id?: boolean
   banId?: boolean
   venueId?: boolean
-  endDate?: boolean
   ban?: boolean | Prisma.BanDefaultArgs<ExtArgs>
   venue?: boolean | Prisma.VenueDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["venueBan"]>
@@ -536,7 +500,6 @@ export type VenueBanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   banId?: boolean
   venueId?: boolean
-  endDate?: boolean
   ban?: boolean | Prisma.BanDefaultArgs<ExtArgs>
   venue?: boolean | Prisma.VenueDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["venueBan"]>
@@ -545,7 +508,6 @@ export type VenueBanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   banId?: boolean
   venueId?: boolean
-  endDate?: boolean
   ban?: boolean | Prisma.BanDefaultArgs<ExtArgs>
   venue?: boolean | Prisma.VenueDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["venueBan"]>
@@ -554,10 +516,9 @@ export type VenueBanSelectScalar = {
   id?: boolean
   banId?: boolean
   venueId?: boolean
-  endDate?: boolean
 }
 
-export type VenueBanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "banId" | "venueId" | "endDate", ExtArgs["result"]["venueBan"]>
+export type VenueBanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "banId" | "venueId", ExtArgs["result"]["venueBan"]>
 export type VenueBanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ban?: boolean | Prisma.BanDefaultArgs<ExtArgs>
   venue?: boolean | Prisma.VenueDefaultArgs<ExtArgs>
@@ -581,7 +542,6 @@ export type $VenueBanPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     id: string
     banId: string
     venueId: string
-    endDate: Date
   }, ExtArgs["result"]["venueBan"]>
   composites: {}
 }
@@ -1010,7 +970,6 @@ export interface VenueBanFieldRefs {
   readonly id: Prisma.FieldRef<"VenueBan", 'String'>
   readonly banId: Prisma.FieldRef<"VenueBan", 'String'>
   readonly venueId: Prisma.FieldRef<"VenueBan", 'String'>
-  readonly endDate: Prisma.FieldRef<"VenueBan", 'DateTime'>
 }
     
 
