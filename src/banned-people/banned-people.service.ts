@@ -160,6 +160,9 @@ export class BannedPeopleService {
 								venue: true
 							}
 						}
+					},
+					orderBy: {
+						endDate: "desc"
 					}
 				}
 			},

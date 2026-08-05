@@ -17,8 +17,8 @@ import type * as Prisma from "./prismaNamespace"
 
 const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
-  "clientVersion": "7.8.0",
-  "engineVersion": "3c6e192761c0362d496ed980de936e2f3cebcd3a",
+  "clientVersion": "7.9.0",
+  "engineVersion": "e922089b7d7502aff4249d5da3420f6fa55fc6ad",
   "activeProvider": "postgresql",
   "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider     = \"prisma-client\"\n  output       = \"../src/generated/prisma\"\n  moduleFormat = \"cjs\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Staff {\n  id                      String         @id @default(uuid())\n  email                   String         @unique\n  password                String\n  name                    String\n  role                    Role\n  venueManagerAssignments VenueManager[]\n  dutyManagerAssignments  DutyManager[]\n  bansCreated             Ban[]          @relation(\"BanCreator\")\n  alerts                  Alert[]        @relation(\"AlertCreator\")\n}\n\nenum Role {\n  ADMIN\n  VENUE_MANAGER\n  DUTY_MANAGER\n  BOUNCER\n}\n\n// ============================================\n// VENUES\n// ============================================\n\nmodel Venue {\n  id        String @id @default(uuid())\n  name      String\n  imagePath String\n  address   String\n  phone     String\n\n  // Relationships\n  venueManagers VenueManager[]\n  dutyManagers  DutyManager[]\n  venueBans     VenueBan[]\n}\n\n// Many-to-many: Venue Managers can manage multiple venues\nmodel VenueManager {\n  id      String @id @default(uuid())\n  userId  String\n  venueId String\n\n  staff Staff @relation(fields: [userId], references: [id], onDelete: Cascade)\n  venue Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)\n\n  @@unique([userId, venueId])\n}\n\n// Many-to-many: Duty Managers can be assigned to multiple venues (view only)\nmodel DutyManager {\n  id      String @id @default(uuid())\n  userId  String\n  venueId String\n\n  staff Staff @relation(fields: [userId], references: [id], onDelete: Cascade)\n  venue Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)\n\n  @@unique([userId, venueId])\n}\n\n// ============================================\n// PEOPLE (BANNED INDIVIDUALS)\n// ============================================\n\nmodel BannedPerson {\n  id        String @id @default(uuid())\n  name      String\n  imagePath String\n  bans      Ban[]\n  alerts    Alert?\n}\n\n// ============================================\n// BANS\n// ============================================\n\nmodel Ban {\n  id           String    @id @default(uuid())\n  personId     String\n  createdById  String\n  reason       String\n  notes        String?\n  startDate    DateTime  @default(now()) // When the incident occurred\n  endDate      DateTime\n  // Ban type and scope\n  isBlanketBan Boolean   @default(false) // True = applies to all venues, False = specific venues\n  status       BanStatus @default(PENDING)\n\n  // Relationships\n  person    BannedPerson @relation(fields: [personId], references: [id], onDelete: Cascade)\n  createdBy Staff        @relation(\"BanCreator\", fields: [createdById], references: [id])\n  venueBans VenueBan[] // Individual venue-level bans with specific end dates\n}\n\nmodel Alert {\n  id           String        @id @default(uuid())\n  personId     String?       @unique\n  reason       String\n  imagePath    String\n  startDate    DateTime      @default(now())\n  createdById  String\n  createdBy    Staff         @relation(\"AlertCreator\", fields: [createdById], references: [id])\n  bannedPerson BannedPerson? @relation(fields: [personId], references: [id])\n}\n\nenum BanStatus {\n  PENDING // Awaiting approval\n  APPROVED // Active ban\n  DENIED // Rejected by approver\n  EXPIRED // Past end date\n}\n\n// ============================================\n// VENUE-SPECIFIC BAN DETAILS\n// ============================================\n\n// This table allows each venue to have its own end date for a ban\nmodel VenueBan {\n  id      String @id @default(uuid())\n  banId   String\n  venueId String\n  // endDate   DateTime // Can be modified independently per venue\n  ban     Ban    @relation(fields: [banId], references: [id], onDelete: Cascade)\n  venue   Venue  @relation(fields: [venueId], references: [id], onDelete: Cascade)\n\n  @@unique([banId, venueId])\n}\n",
   "runtimeDataModel": {
@@ -82,7 +82,7 @@ export interface PrismaClientConstructor {
     LogOpts extends LogOptions<Options> = LogOptions<Options>,
     OmitOpts extends Prisma.PrismaClientOptions['omit'] = Options extends { omit: infer U } ? U : Prisma.PrismaClientOptions['omit'],
     ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs
-  >(options: Prisma.Subset<Options, Prisma.PrismaClientOptions> ): PrismaClient<LogOpts, OmitOpts, ExtArgs>
+  >(options: Prisma.PrismaClientConstructorArgs<Options>): PrismaClient<LogOpts, OmitOpts, ExtArgs>
 }
 
 /**
@@ -103,7 +103,7 @@ export interface PrismaClientConstructor {
 
 export interface PrismaClient<
   in LogOpts extends Prisma.LogLevel = never,
-  in out OmitOpts extends Prisma.PrismaClientOptions['omit'] = undefined,
+  in out OmitOpts extends Prisma.PrismaClientOptions['omit'] = Prisma.PrismaClientOptions['omit'],
   in out ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
